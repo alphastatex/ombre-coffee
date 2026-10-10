@@ -1,683 +1,485 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Кофейня Омбре — Уютное место в Хорошево-Мневниках | Кофе, десерты,
-      завтраки
-    </title>
-    <meta
-      name="description"
-      content="Кофейня Омбре в районе Хорошево-Мневники. Свежая выпечка из собственной пекарни, авторский кофе от опытных бариста, уютная атмосфера. Бронируйте столик онлайн."
-    />
-    <meta
-      name="keywords"
-      content="кофейня, Омбре, Хорошево-Мневники, кофе, завтраки, десерты, круассаны, Москва"
-    />
-    <meta name="author" content="Кофейня Омбре" />
-    <meta name="theme-color" content="#3d2e1f" />
-    <meta
-      property="og:title"
-      content="Кофейня Омбре — Уютное место в Хорошево-Мневниках"
-    />
-    <meta
-      property="og:description"
-      content="Вкусный кофе, свежие десерты из собственной пекарни и атмосфера, в которую хочется возвращаться."
-    />
-    <meta property="og:image" content="images/hero-main.jpg" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ru_RU" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233d2e1f'/%3E%3Cpath d='M18 28h22v14a8 8 0 0 1-8 8h-6a8 8 0 0 1-8-8V28z' fill='none' stroke='%23faf7f2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M40 32h2a6 6 0 0 1 0 12h-2' fill='none' stroke='%23faf7f2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M24 22c0-2 1.5-3 1.5-3M30 20c0-2 1.5-3 1.5-3M36 22c0-2 1.5-3 1.5-3' fill='none' stroke='%23faf7f2' stroke-width='2' stroke-linecap='round' opacity='0.8'/%3E%3C/svg%3E"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="grain"></div>
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кофейня Омбре — Уютное место в Хорошево-Мневниках | Кофе, десерты, завтраки</title>
+  
+  <!-- SEO -->
+  <meta name="description" content="Кофейня Омбре в Хорошево-Мневниках. Вкусный кофе от опытных бариста, свежие десерты из собственной пекарни и уютная атмосфера.">
+  <meta property="og:title" content="Кофейня Омбре — Уютное место в Хорошево-Мневниках">
+  <meta property="og:description" content="Вкусный кофе, свежие десерты и атмосфера настоящего уюта.">
+  <meta property="og:type" content="website">
 
-    <div class="preloader">
-      <div class="preloader-logo">
-        <span>О</span><span>М</span><span>Б</span><span>Р</span><span>Е</span
-        ><span>.</span>
-      </div>
-      <div class="preloader-line"></div>
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%233d2e1f'/%3E%3Cpath d='M15 20 C15 15, 20 12, 24 12 C28 12, 33 15, 33 20 L33 28 C33 33, 28 36, 24 36 C20 36, 15 33, 15 28 Z' fill='%23faf7f2'/%3E%3Cpath d='M33 22 C36 22, 38 24, 38 27 C38 30, 36 32, 33 32' fill='none' stroke='%23faf7f2' stroke-width='2'/%3E%3C/svg%3E">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-loading">
+
+  <!-- Grain -->
+  <div class="grain"></div>
+
+  <!-- Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="preloader-logo">
+      <span>О</span><span>М</span><span>Б</span><span>Р</span><span>Е</span><span>.</span>
     </div>
+    <div class="preloader-line"></div>
+  </div>
 
-    <div class="scroll-progress"></div>
+  <!-- Scroll Progress -->
+  <div class="scroll-progress"></div>
 
-    <nav>
-    <a href="index.html" class="logo"><span>ОМБРЕ</span></a>
-      <ul class="nav-links">
-        <li>
-          <a href="#about" data-text="О нас"
-            ><span class="link-text">О нас</span></a
-          >
-        </li>
-        <li>
-          <a href="#menu" data-text="Меню"
-            ><span class="link-text">Меню</span></a
-          >
-        </li>
-        <li>
-          <a href="#atmosphere" data-text="Атмосфера"
-            ><span class="link-text">Атмосфера</span></a
-          >
-        </li>
-        <li>
-          <a href="#reviews" data-text="Отзывы"
-            ><span class="link-text">Отзывы</span></a
-          >
-        </li>
-        <li>
-          <a href="#location" data-text="Контакты"
-            ><span class="link-text">Контакты</span></a
-          >
-        </li>
-        <li>
-          <a href="#booking" class="nav-cta"
-            ><span class="link-text">Забронировать</span></a
-          >
-        </li>
-      </ul>
-    </nav>
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="logo"><span>ОМБРЕ.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about" data-text="О нас"><span class="link-text">О нас</span></a></li>
+      <li><a href="#menu" data-text="Меню"><span class="link-text">Меню</span></a></li>
+      <li><a href="#atmosphere" data-text="Атмосфера"><span class="link-text">Атмосфера</span></a></li>
+      <li><a href="#reviews" data-text="Отзывы"><span class="link-text">Отзывы</span></a></li>
+      <li><a href="#location" data-text="Контакты"><span class="link-text">Контакты</span></a></li>
+      <li><a href="#booking" class="nav-cta" data-text="Забронировать"><span class="link-text">Забронировать</span></a></li>
+    </ul>
+  </nav>
 
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-content">
-          <span class="hero-tag">Кофейня в Хорошево-Мневниках</span>
-          <h1>
-            <span class="word"><span class="word-inner">Место,</span></span>
-            <span class="word"><span class="word-inner">где</span></span>
-            <span class="word"><span class="word-inner">хочется</span></span
-            ><br />
-            <span class="word"
-              ><span class="word-inner"><em>остановиться</em>.</span></span
-            >
-          </h1>
-          <p>
-            Вкусный кофе от опытных бариста, свежие десерты из собственной
-            пекарни и уютная атмосфера. Просто приходите — мы позаботимся об
-            остальном.
-          </p>
-          <div class="hero-buttons">
-            <a href="#booking" class="btn btn-primary" data-magnetic
-              >Забронировать столик</a
-            >
-            <a href="#menu" class="btn btn-outline" data-magnetic
-              >Посмотреть меню</a
-            >
-          </div>
-        </div>
-        <div class="hero-image">
-          <div class="hero-image-wrapper" data-parallax="0.15">
-            <img
-              src="images/hero-main.jpg"
-              alt="Интерьер кофейни Омбре"
-              class="hero-image-main"
-              loading="eager"
-            />
-          </div>
-          <div class="hero-image-accent-wrapper" data-parallax="0.25">
-            <img
-              src="images/hero-accent.jpg"
-              alt="Латте-арт"
-              class="hero-image-accent"
-              loading="eager"
-            />
-          </div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <span class="hero-tag">Кофейня в Хорошево-Мневниках</span>
+        <h1>
+          <span class="word"><span class="word-inner">Место,</span></span>
+          <span class="word"><span class="word-inner">где</span></span>
+          <span class="word"><span class="word-inner">хочется</span></span>
+          <span class="word"><span class="word-inner"><em>остановиться.</em></span></span>
+        </h1>
+        <p>Вкусный кофе от опытных бариста, свежие десерты из собственной пекарни и уютная атмосфера. Просто приходите — мы позаботимся об остальном.</p>
+        <div class="hero-buttons">
+          <a href="#booking" class="btn btn-primary">Забронировать столик</a>
+          <a href="#menu" class="btn btn-outline">Посмотреть меню</a>
         </div>
       </div>
-    </section>
-
-    <section id="about" class="about">
-      <div class="about-grid">
-        <div class="about-image reveal">
-          <img
-            src="images/philosophy.jpg"
-            alt="Процесс приготовления кофе"
-            loading="lazy"
-          />
+      <div class="hero-image">
+        <div class="hero-image-wrapper">
+          <img src="images/hero-main.jpg" alt="Интерьер кофейни Омбре" class="hero-image-main">
         </div>
-        <div class="about-text">
-          <span class="section-label reveal-line"
-            ><span class="reveal-line-inner">Наша история</span></span
-          >
-          <h2 class="section-title reveal-line">
-            <span class="reveal-line-inner"
-              >Кофейня, в которую хочется возвращаться</span
-            >
-          </h2>
-          <p class="reveal">
-            Кофейня Омбре — это про комфорт, вкусный кофе и спокойствие. В
-            Москве таких мест много, но мы хотим быть тем, куда просто хочется
-            вернуться.
-          </p>
-          <p class="reveal">
-            Здесь варят опытные люди, а основатель Иван Иванов открыл кофейню 4
-            года назад с простой целью — чтобы в первую очередь он сам и его
-            близкие могли получить то, чего не всегда получаешь в других местах:
-            настоящий вкус, уют и внимание к деталям.
-          </p>
-          <p class="reveal">
-            Расположена в районе Хорошево-Мневники, мы рады встретить каждого,
-            кто хочет получить удовольствие и от напитка, и от вкусных десертов.
-            У нас своя пекарня, поэтому выпечка всегда свежая.
-          </p>
-          <div class="quote reveal">
-            "Я хотел создать место, куда сам бы приходил каждое утро. Где кофе
-            действительно вкусный, а не просто горячий. Где тебя знают по имени
-            и помнят, как ты любишь свой латте."
-            <div class="quote-author">Иван Иванов, основатель</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="stats">
-      <div class="stats-grid">
-        <div class="stat-item reveal">
-          <span class="stat-number" data-counter="4">0</span>
-          <span class="stat-label">Года с вами</span>
-        </div>
-        <div class="stat-item reveal">
-          <span class="stat-number" data-counter="15000">0</span>
-          <span class="stat-label">Чашек в месяц</span>
-        </div>
-        <div class="stat-item reveal">
-          <span class="stat-number" data-counter="28">0</span>
-          <span class="stat-label">Видов кофе</span>
-        </div>
-        <div class="stat-item reveal">
-          <span class="stat-number" data-counter="98">0</span>
-          <span class="stat-label">% довольных гостей</span>
+        <div class="hero-image-accent-wrapper">
+          <img src="images/hero-accent.jpg" alt="Кофе и выпечка" class="hero-image-accent">
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="promo">
-      <div class="promo-inner reveal">
-        <span class="promo-badge">Акция дня</span>
-        <h2>Завтрак до 11:00 — скидка 15%</h2>
-        <p>
-          Начните утро правильно: любая позиция из раздела «Завтраки» + кофе на
-          выбор со скидкой 15% каждый будний день до 11:00.
-        </p>
-        <a href="#menu" class="btn" data-magnetic>Смотреть меню завтраков</a>
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="section-header reveal">
+      <span class="section-label">Наша история</span>
+      <h2 class="section-title">Кофейня, в которую хочется возвращаться</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-image reveal">
+        <img src="images/philosophy.jpg" alt="Бариста готовит кофе">
+      </div>
+      <div class="about-text reveal">
+        <p>Кофейня Омбре — это про комфорт, вкусный кофе и спокойствие. В Москве таких мест много, но мы хотим быть тем, куда просто хочется вернуться.</p>
+        <p>Здесь варят опытные люди, а основатель Иван Иванов открыл кофейню 4 года назад с простой целью — чтобы в первую очередь он сам и его близкие могли получить то, чего не всегда получаешь в других местах: настоящий вкус, уют и внимание к деталям.</p>
+        <p>Расположена в районе Хорошево-Мневники, мы рады встретить каждого, кто хочет получить удовольствие и от напитка, и от вкусных десертов. У нас своя пекарня, поэтому выпечка всегда свежая.</p>
+        <div class="quote">
+          "Я хотел создать место, куда сам бы приходил каждое утро. Где кофе действительно вкусный, а не просто горячий. Где тебя знают по имени и помнят, как ты любишь свой латте."
+          <div class="quote-author">Иван Иванов, основатель</div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="marquee">
-      <div class="marquee-track">
-        <div class="marquee-item">Свежая выпечка каждый день</div>
-        <div class="marquee-item">Авторский кофе</div>
-        <div class="marquee-item">Уютная атмосфера</div>
-        <div class="marquee-item">Собственная пекарня</div>
-        <div class="marquee-item">Свежая выпечка каждый день</div>
-        <div class="marquee-item">Авторский кофе</div>
-        <div class="marquee-item">Уютная атмосфера</div>
-        <div class="marquee-item">Собственная пекарня</div>
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <span class="stat-number" data-counter="4">0</span>
+        <span class="stat-label">Года с вами</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-counter="2500">0</span>
+        <span class="stat-label">Чашек в месяц</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-counter="15">0</span>
+        <span class="stat-label">Видов кофе</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-counter="98">0</span>
+        <span class="stat-label">% довольных гостей</span>
       </div>
     </div>
+  </section>
 
-    <section id="menu">
-      <div class="section-header">
-        <span class="section-label reveal-line"
-          ><span class="reveal-line-inner">Наше меню</span></span
-        >
-        <h2 class="section-title reveal-line">
-          <span class="reveal-line-inner"
-            >Свежая выпечка, авторский кофе и сытные завтраки</span
-          >
-        </h2>
-        <p class="section-subtitle reveal">
-          Свежая выпечка из собственной пекарни, авторский кофе и сытные
-          завтраки весь день.
-        </p>
-      </div>
-
-      <div class="menu-grid">
-        <div class="menu-category reveal">
-          <h3>Кофе</h3>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Эспрессо</div>
-              <div class="menu-item-desc">Классика итальянской обжарки</div>
-            </div>
-            <div class="menu-item-price">150 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Капучино</div>
-              <div class="menu-item-desc">Идеальный баланс кофе и молока</div>
-            </div>
-            <div class="menu-item-price">250 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Латте</div>
-              <div class="menu-item-desc">Мягкий вкус с нежной пенкой</div>
-            </div>
-            <div class="menu-item-price">280 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Флэт Уайт</div>
-              <div class="menu-item-desc">
-                Двойной эспрессо с бархатным молоком
-              </div>
-            </div>
-            <div class="menu-item-price">300 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Раф</div>
-              <div class="menu-item-desc">С ванилью или лавандой</div>
-            </div>
-            <div class="menu-item-price">320 ₽</div>
-          </div>
-        </div>
-
-        <div class="menu-category reveal">
-          <h3>Десерты</h3>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Круассан</div>
-              <div class="menu-item-desc">Свежая выпечка из нашей пекарни</div>
-            </div>
-            <div class="menu-item-price">180 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Чизкейк</div>
-              <div class="menu-item-desc">Нью-Йорк или ягодный</div>
-            </div>
-            <div class="menu-item-price">350 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Тирамису</div>
-              <div class="menu-item-desc">Классический итальянский рецепт</div>
-            </div>
-            <div class="menu-item-price">380 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Медовик</div>
-              <div class="menu-item-desc">Домашний, по бабушкиному рецепту</div>
-            </div>
-            <div class="menu-item-price">320 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Эклер</div>
-              <div class="menu-item-desc">С заварным кремом</div>
-            </div>
-            <div class="menu-item-price">220 ₽</div>
-          </div>
-        </div>
-
-        <div class="menu-category reveal">
-          <h3>Завтраки</h3>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Авокадо-тост</div>
-              <div class="menu-item-desc">С яйцом пашот и микрозеленью</div>
-            </div>
-            <div class="menu-item-price">450 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Сырники</div>
-              <div class="menu-item-desc">Со сметаной и ягодным соусом</div>
-            </div>
-            <div class="menu-item-price">380 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Овсяноблин</div>
-              <div class="menu-item-desc">С лососем и сливочным сыром</div>
-            </div>
-            <div class="menu-item-price">420 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Каша</div>
-              <div class="menu-item-desc">Гречневая, овсяная или киноа</div>
-            </div>
-            <div class="menu-item-price">280 ₽</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <div class="menu-item-name">Яйца Бенедикт</div>
-              <div class="menu-item-desc">С ветчиной и голландским соусом</div>
-            </div>
-            <div class="menu-item-price">480 ₽</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="atmosphere" class="atmosphere">
-      <div class="section-header">
-        <span class="section-label reveal-line"
-          ><span class="reveal-line-inner">Атмосфера</span></span
-        >
-        <h2 class="section-title reveal-line">
-          <span class="reveal-line-inner">Место, где время замедляется</span>
-        </h2>
-        <p class="section-subtitle reveal">
-          Уютные уголки, мягкий свет и запах свежего кофе.
-        </p>
-      </div>
-
-      <div class="gallery">
-        <div class="gallery-item reveal" data-lightbox="0">
-          <img src="images/atm-1.jpg" alt="Уютный уголок" loading="lazy" />
-          <div class="gallery-caption">Утренний свет</div>
-        </div>
-        <div class="gallery-item reveal" data-lightbox="1">
-          <img src="images/atm-2.jpg" alt="Светлый интерьер" loading="lazy" />
-          <div class="gallery-caption">Тихий уголок</div>
-        </div>
-        <div class="gallery-item reveal" data-lightbox="2">
-          <img src="images/atm-3.jpg" alt="Кофе и выпечка" loading="lazy" />
-          <div class="gallery-caption">Свежая выпечка</div>
-        </div>
-        <div class="gallery-item reveal" data-lightbox="3">
-          <img src="images/atm-4.jpg" alt="Просторный зал" loading="lazy" />
-          <div class="gallery-caption">Простор и свет</div>
-        </div>
-      </div>
-    </section>
-
-    <div
-      class="lightbox"
-      id="lightbox"
-      role="dialog"
-      aria-label="Просмотр изображения"
-    >
-      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Закрыть">
-        ×
-      </button>
-      <button
-        type="button"
-        class="lightbox-nav lightbox-prev"
-        id="lightboxPrev"
-        aria-label="Предыдущее фото"
-      >
-        ‹
-      </button>
-      <button
-        type="button"
-        class="lightbox-nav lightbox-next"
-        id="lightboxNext"
-        aria-label="Следующее фото"
-      >
-        ›
-      </button>
-      <img src="" alt="" class="lightbox-img" id="lightboxImg" />
+  <!-- Promo -->
+  <section class="promo">
+    <div class="promo-inner reveal">
+      <span class="promo-badge">Акция дня</span>
+      <h2>Завтрак до 11:00 — скидка 15%</h2>
+      <p>Начните утро правильно: любая позиция из раздела «Завтраки» + кофе на выбор со скидкой 15% каждый будний день до 11:00.</p>
+      <a href="#menu" class="btn">Смотреть меню завтраков</a>
     </div>
+  </section>
 
-    <section id="reviews" class="reviews">
-      <div class="section-header">
-        <span class="section-label reveal-line"
-          ><span class="reveal-line-inner">Отзывы</span></span
-        >
-        <h2 class="section-title reveal-line">
-          <span class="reveal-line-inner">Что говорят наши гости</span>
-        </h2>
-        <p class="section-subtitle reveal">
-          Нам доверяют жители района. Вот что они пишут о нас.
-        </p>
-      </div>
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span class="marquee-item">Свежая выпечка каждый день</span>
+      <span class="marquee-item">Авторский кофе</span>
+      <span class="marquee-item">Уютная атмосфера</span>
+      <span class="marquee-item">Собственная пекарня</span>
+      <span class="marquee-item">Свежая выпечка каждый день</span>
+      <span class="marquee-item">Авторский кофе</span>
+      <span class="marquee-item">Уютная атмосфера</span>
+      <span class="marquee-item">Собственная пекарня</span>
+    </div>
+  </div>
 
-      <section
-        class="carousel-container"
-        id="carouselContainer"
-        aria-label="Отзывы гостей"
-      >
-        <div class="carousel-track" id="carouselTrack"></div>
-      </section>
-
-      <div class="carousel-controls">
-        <button type="button" class="carousel-btn" id="prevBtn" aria-label="Предыдущий отзыв">
-          <span>←</span>
-        </button>
-        <div class="carousel-dots" id="carouselDots" role="tablist"></div>
-        <button type="button" class="carousel-btn" id="nextBtn" aria-label="Следующий отзыв">
-          <span>→</span>
-        </button>
-      </div>
-    </section>
-
-    <section id="booking" class="booking">
-      <div class="section-header" style="text-align: center">
-        <span class="section-label reveal-line"
-          ><span class="reveal-line-inner">Бронирование</span></span
-        >
-        <h2 class="section-title reveal-line">
-          <span class="reveal-line-inner">Забронировать столик</span>
-        </h2>
-        <p class="section-subtitle reveal" style="margin: 0 auto">
-          Гарантируйте себе место у окна или в уютном углу.
-        </p>
-      </div>
-
-      <form class="booking-form reveal" id="bookingForm" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <input type="text" id="name" name="name" placeholder=" " required />
-            <label for="name">Ваше имя</label>
-            <div class="error-message" id="nameError">
-              Пожалуйста, введите ваше имя
-            </div>
+  <!-- Menu -->
+  <section class="menu" id="menu">
+    <div class="section-header reveal">
+      <span class="section-label">Наше меню</span>
+      <h2 class="section-title">Свежая выпечка, авторский кофе и сытные завтраки</h2>
+      <p class="section-subtitle">Свежая выпечка из собственной пекарни, авторский кофе и сытные завтраки весь день.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-category reveal">
+        <h3>Кофе</h3>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Эспрессо</div>
+            <div class="menu-item-desc">Классика итальянской обжарки</div>
           </div>
-          <div class="form-group">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder=" "
-              required
-            />
-            <label for="phone">Телефон</label>
-            <div class="error-message" id="phoneError">
-              Введите корректный номер телефона
-            </div>
-          </div>
+          <div class="menu-item-price">150 ₽</div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <input type="date" id="date" name="date" required />
-            <label for="date">Дата</label>
-            <div class="error-message" id="dateError">Выберите дату</div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Капучино</div>
+            <div class="menu-item-desc">Идеальный баланс кофе и молока</div>
           </div>
-          <div class="form-group">
-            <select id="time" name="time" required>
-              <option value="">Выберите время</option>
-              <option>08:00</option>
-              <option>09:00</option>
-              <option>10:00</option>
-              <option>11:00</option>
-              <option>12:00</option>
-              <option>13:00</option>
-              <option>14:00</option>
-              <option>15:00</option>
-              <option>16:00</option>
-              <option>17:00</option>
-              <option>18:00</option>
-              <option>19:00</option>
-              <option>20:00</option>
-              <option>21:00</option>
-            </select>
-            <label for="time">Время</label>
-            <div class="error-message" id="timeError">Выберите время</div>
-          </div>
+          <div class="menu-item-price">250 ₽</div>
         </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Латте</div>
+            <div class="menu-item-desc">Мягкий вкус с нежной пенкой</div>
+          </div>
+          <div class="menu-item-price">280 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Флэт Уайт</div>
+            <div class="menu-item-desc">Двойной эспрессо с бархатным молоком</div>
+          </div>
+          <div class="menu-item-price">300 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Раф</div>
+            <div class="menu-item-desc">С ванилью или лавандой</div>
+          </div>
+          <div class="menu-item-price">320 ₽</div>
+        </div>
+      </div>
+      <div class="menu-category reveal">
+        <h3>Десерты</h3>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Круассан</div>
+            <div class="menu-item-desc">Свежая выпечка из нашей пекарни</div>
+          </div>
+          <div class="menu-item-price">180 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Чизкейк</div>
+            <div class="menu-item-desc">Нью-Йорк или ягодный</div>
+          </div>
+          <div class="menu-item-price">350 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Тирамису</div>
+            <div class="menu-item-desc">Классический итальянский рецепт</div>
+          </div>
+          <div class="menu-item-price">380 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Медовик</div>
+            <div class="menu-item-desc">Домашний, по бабушкиному рецепту</div>
+          </div>
+          <div class="menu-item-price">320 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Эклер</div>
+            <div class="menu-item-desc">С заварным кремом</div>
+          </div>
+          <div class="menu-item-price">220 ₽</div>
+        </div>
+      </div>
+      <div class="menu-category reveal">
+        <h3>Завтраки</h3>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Авокадо-тост</div>
+            <div class="menu-item-desc">С яйцом пашот и микрозеленью</div>
+          </div>
+          <div class="menu-item-price">450 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Сырники</div>
+            <div class="menu-item-desc">Со сметаной и ягодным соусом</div>
+          </div>
+          <div class="menu-item-price">380 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Овсяноблин</div>
+            <div class="menu-item-desc">С лососем и сливочным сыром</div>
+          </div>
+          <div class="menu-item-price">420 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Каша</div>
+            <div class="menu-item-desc">Гречневая, овсяная или киноа</div>
+          </div>
+          <div class="menu-item-price">280 ₽</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Яйца Бенедикт</div>
+            <div class="menu-item-desc">С ветчиной и голландским соусом</div>
+          </div>
+          <div class="menu-item-price">480 ₽</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- Atmosphere / Gallery -->
+  <section class="atmosphere" id="atmosphere">
+    <div class="section-header reveal">
+      <span class="section-label">Атмосфера</span>
+      <h2 class="section-title">Место, где время замедляется</h2>
+      <p class="section-subtitle">Уютные уголки, мягкий свет и запах свежего кофе.</p>
+    </div>
+    <div class="gallery">
+      <div class="gallery-item reveal" data-lightbox="0">
+        <img src="images/atm-1.jpg" alt="Утренний свет в кофейне">
+        <div class="gallery-caption">Утренний свет</div>
+      </div>
+      <div class="gallery-item reveal" data-lightbox="1">
+        <img src="images/atm-2.jpg" alt="Тихий уголок">
+        <div class="gallery-caption">Тихий уголок</div>
+      </div>
+      <div class="gallery-item reveal" data-lightbox="2">
+        <img src="images/atm-3.jpg" alt="Свежая выпечка">
+        <div class="gallery-caption">Свежая выпечка</div>
+      </div>
+      <div class="gallery-item reveal" data-lightbox="3">
+        <img src="images/atm-4.jpg" alt="Простор и свет">
+        <div class="gallery-caption">Простор и свет</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+    <img src="" alt="" class="lightbox-img" id="lightboxImg">
+    <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+  </div>
+
+  <!-- Reviews -->
+  <section class="reviews" id="reviews">
+    <div class="section-header reveal">
+      <span class="section-label">Отзывы</span>
+      <h2 class="section-title">Что говорят наши гости</h2>
+      <p class="section-subtitle">Нам доверяют жители района. Вот что они пишут о нас.</p>
+    </div>
+    <div class="carousel-container" id="carouselContainer">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn"><span>←</span></button>
+      <div class="carousel-dots" id="carouselDots"></div>
+      <button class="carousel-btn" id="nextBtn"><span>→</span></button>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section class="booking" id="booking">
+    <div class="section-header reveal">
+      <span class="section-label">Бронирование</span>
+      <h2 class="section-title">Забронировать столик</h2>
+      <p class="section-subtitle">Гарантируйте себе место у окна или в уютном углу.</p>
+    </div>
+    <form class="booking-form reveal" id="bookingForm">
+      <div class="form-row">
         <div class="form-group">
-          <select id="guests" name="guests" required>
-            <option value="">Выберите</option>
-            <option>1 персона</option>
-            <option>2 персоны</option>
-            <option>3 персоны</option>
-            <option>4 персоны</option>
-            <option>5+ персон</option>
+          <input type="text" id="name" placeholder=" " required>
+          <label for="name">Ваше имя</label>
+          <div class="error-message" id="nameError">Пожалуйста, введите ваше имя</div>
+        </div>
+        <div class="form-group">
+          <input type="tel" id="phone" placeholder=" " required>
+          <label for="phone">Телефон</label>
+          <div class="error-message" id="phoneError">Введите корректный номер телефона</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <input type="date" id="date" required>
+          <label for="date">Дата</label>
+          <div class="error-message" id="dateError">Выберите дату</div>
+        </div>
+        <div class="form-group">
+          <select id="time" required>
+            <option value="">Выберите время</option>
+            <option>08:00</option>
+            <option>09:00</option>
+            <option>10:00</option>
+            <option>11:00</option>
+            <option>12:00</option>
+            <option>13:00</option>
+            <option>14:00</option>
+            <option>15:00</option>
+            <option>16:00</option>
+            <option>17:00</option>
+            <option>18:00</option>
+            <option>19:00</option>
+            <option>20:00</option>
+            <option>21:00</option>
           </select>
-          <label for="guests">Количество гостей</label>
-          <div class="error-message" id="guestsError">
-            Укажите количество гостей
-          </div>
-        </div>
-
-        <div class="form-group">
-          <textarea
-            id="comment"
-            name="comment"
-            rows="3"
-            placeholder=" "
-          ></textarea>
-          <label for="comment">Комментарий</label>
-        </div>
-
-        <button type="submit" class="btn btn-primary" data-magnetic>
-          Отправить заявку
-        </button>
-      </form>
-    </section>
-
-    <section id="location">
-      <div class="section-header">
-        <span class="section-label reveal-line"
-          ><span class="reveal-line-inner">Контакты</span></span
-        >
-        <h2 class="section-title reveal-line">
-          <span class="reveal-line-inner">Как нас найти</span>
-        </h2>
-        <p class="section-subtitle reveal">
-          Мы в самом сердце Хорошево-Мневников.
-        </p>
-      </div>
-
-      <div class="location-grid">
-        <div class="location-info">
-          <h3 class="reveal-line">
-            <span class="reveal-line-inner">Адрес</span>
-          </h3>
-          <p class="reveal">
-            ул. Народного Ополчения, 35<br />Москва, Хорошево-Мневники
-          </p>
-
-          <h3 class="reveal-line">
-            <span class="reveal-line-inner">Телефон</span>
-          </h3>
-          <p class="reveal">
-            <a href="tel:+74951234567">+7 (495) 123-45-67</a>
-          </p>
-
-          <h3 class="reveal-line">
-            <span class="reveal-line-inner">Время работы</span>
-          </h3>
-          <p class="reveal">
-            Пн – Пт: 08:00 – 22:00<br />Сб – Вс: 09:00 – 23:00
-          </p>
-
-          <h3 class="reveal-line">
-            <span class="reveal-line-inner">Соцсети</span>
-          </h3>
-          <div class="socials reveal">
-            <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="social-link">Telegram</a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link">Instagram</a>
-            <a href="https://vk.com/" target="_blank" rel="noopener noreferrer" class="social-link">VK</a>
-            <a href="https://whatsapp.com/" target="_blank" rel="noopener noreferrer" class="social-link">WhatsApp</a>
-          </div>
-        </div>
-
-        <div class="map-container reveal">
-          <iframe
-            src="https://yandex.ru/map-widget/v1/?um=constructor%3A&amp;source=constructor&amp;ll=37.481067%2C55.767488&amp;z=16&amp;pt=37.481067,55.767488,pm2rdm"
-            allowfullscreen
-            loading="lazy"
-            title="Карта расположения кофейни"
-          ></iframe>
+          <label for="time">Время</label>
+          <div class="error-message" id="timeError">Выберите время</div>
         </div>
       </div>
-    </section>
+      <div class="form-group">
+        <select id="guests" required>
+          <option value="">Выберите</option>
+          <option>1 персона</option>
+          <option>2 персоны</option>
+          <option>3 персоны</option>
+          <option>4 персоны</option>
+          <option>5+ персон</option>
+        </select>
+        <label for="guests">Количество гостей</label>
+        <div class="error-message" id="guestsError">Укажите количество гостей</div>
+      </div>
+      <div class="form-group">
+        <textarea id="comment" rows="3" placeholder=" "></textarea>
+        <label for="comment">Комментарий</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Отправить заявку</button>
+    </form>
+  </section>
 
-    <footer>
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo"><span>ОМБРЕ</span></a>
-          <p>
-            Кофейня, в которую хочется возвращаться. Свежий кофе, домашняя
-            выпечка и атмосфера настоящего уюта в сердце Хорошево-Мневников.
-          </p>
-        </div>
-        <div class="footer-col">
-          <h4>Навигация</h4>
-          <ul>
-            <li><a href="#about">О нас</a></li>
-            <li><a href="#menu">Меню</a></li>
-            <li><a href="#atmosphere">Атмосфера</a></li>
-            <li><a href="#reviews">Отзывы</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Контакты</h4>
-          <ul>
-            <li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
-            <li><a href="mailto:hello@ombre.cafe">hello@ombre.cafe</a></li>
-            <li>ул. Народного Ополчения, 35</li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Часы работы</h4>
-          <ul>
-            <li>Пн – Пт: 08:00 – 22:00</li>
-            <li>Сб – Вс: 09:00 – 23:00</li>
-          </ul>
+  <!-- Location -->
+  <section class="location" id="location">
+    <div class="section-header reveal">
+      <span class="section-label">Контакты</span>
+      <h2 class="section-title">Как нас найти</h2>
+      <p class="section-subtitle">Мы в самом сердце Хорошево-Мневников.</p>
+    </div>
+    <div class="location-grid">
+      <div class="location-info reveal">
+        <h3>Адрес</h3>
+        <p>ул. Народного Ополчения, 35<br>Москва, Хорошево-Мневники</p>
+        <h3>Телефон</h3>
+        <p><a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+        <h3>Время работы</h3>
+        <p>Пн – Пт: 08:00 – 22:00<br>Сб – Вс: 09:00 – 23:00</p>
+        <h3>Соцсети</h3>
+        <div class="socials">
+          <a href="https://t.me/" class="social-link" target="_blank">Telegram</a>
+          <a href="https://instagram.com/" class="social-link" target="_blank">Instagram</a>
+          <a href="https://vk.com/" class="social-link" target="_blank">VK</a>
+          <a href="https://whatsapp.com/" class="social-link" target="_blank">WhatsApp</a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 Кофейня Омбре. Все права защищены.</span>
-        <span>Сделано с любовью к кофе</span>
-      </div>
-    </footer>
-
-    <button type="button" class="scroll-top" id="scrollTop" aria-label="Наверх">↑</button>
-
-    <div
-      class="modal"
-      id="successModal"
-      role="dialog"
-      aria-label="Успешная отправка"
-    >
-      <div class="modal-content">
-        <div class="modal-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" role="img" aria-label="Иконка успешной отправки">
-            <title>Успешно</title>
-            <circle cx="26" cy="26" r="25" />
-            <path d="M14 27l7 7 16-16" />
-          </svg>
-        </div>
-        <h3>Заявка отправлена</h3>
-        <p>Мы скоро свяжемся с вами для подтверждения брони.</p>
-        <button type="button" class="modal-close" id="modalClose">Закрыть</button>
+      <div class="map-container reveal">
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=37.4913,55.7558&z=16&pt=37.4913,55.7558,pm2rdm" allowfullscreen></iframe>
       </div>
     </div>
+  </section>
 
-   <script type="module" src="app.js"></script>
-  </body>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">ОМБРЕ.</a>
+        <p>Кофейня, в которую хочется возвращаться. Свежий кофе, домашняя выпечка и атмосфера настоящего уюта в сердце Хорошево-Мневников.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Навигация</h4>
+        <ul>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#menu">Меню</a></li>
+          <li><a href="#atmosphere">Атмосфера</a></li>
+          <li><a href="#reviews">Отзывы</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
+          <li><a href="mailto:hello@ombre.cafe">hello@ombre.cafe</a></li>
+          <li>ул. Народного Ополчения, 35</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Часы работы</h4>
+        <ul>
+          <li>Пн – Пт: 08:00 – 22:00</li>
+          <li>Сб – Вс: 09:00 – 23:00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Кофейня Омбре. Все права защищены.</span>
+      <span>Сделано с любовью к кофе</span>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <button class="scroll-top" id="scrollTop">↑</button>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <svg viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="28"/>
+          <path d="M20 30 L27 37 L40 23"/>
+        </svg>
+      </div>
+      <h3>Заявка отправлена</h3>
+      <p>Мы скоро свяжемся с вами для подтверждения брони.</p>
+      <button class="modal-close" id="modalClose">Закрыть</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
 </html>
