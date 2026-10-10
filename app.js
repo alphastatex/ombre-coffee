@@ -330,6 +330,32 @@ window.addEventListener('resize', () => {
   }
 });
 
+// ===== TELEGRAM MINI APP INIT =====
+let isTelegramApp = false;
+if (window.Telegram && window.Telegram.WebApp) {
+  isTelegramApp = true;
+  const tg = window.Telegram.WebApp;
+  
+  tg.ready(); 
+  tg.expand();
+
+  const nameInput = document.getElementById('name');
+  if (tg.initDataUnsafe?.user?.first_name && nameInput) {
+    nameInput.value = tg.initDataUnsafe.user.first_name;
+    nameInput.readOnly = true;
+  }
+
+  tg.MainButton.setText('ОТПРАВИТЬ ЗАЯВКУ');
+  tg.MainButton.setTextColor('#ffffff');
+  tg.MainButton.setColor('#8b6f47');
+  tg.MainButton.hide();
+
+  tg.MainButton.onClick(() => {
+    const submitBtn = document.querySelector('#bookingForm button[type="submit"]');
+    if (submitBtn) submitBtn.click();
+  });
+}
+
 // ===== FORM =====
 const form = document.getElementById('bookingForm');
 const nameInput = document.getElementById('name');
@@ -337,6 +363,9 @@ const phoneInput = document.getElementById('phone');
 const dateInput = document.getElementById('date');
 const timeSelect = document.getElementById('time');
 const guestsSelect = document.getElementById('guests');
+const commentInput = document.getElementById('comment');
+
+const PROXY_URL = 'https://tg-ombre-proxy.alphastatex.workers.dev';
 
 phoneInput.addEventListener('input', () => {
   phoneInput.value = formatPhone(phoneInput.value);
@@ -352,7 +381,7 @@ function showError(id, show) {
   input.classList.toggle('error', show);
 }
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   let valid = true;
   
@@ -361,6 +390,7 @@ form.addEventListener('submit', (e) => {
   const date = dateInput.value;
   const time = timeSelect.value;
   const guests = guestsSelect.value;
+  const comment = commentInput.value.trim();
   
   if (name.length < 2) { showError('nameError', true); valid = false; } else showError('nameError', false);
   if (phone.length !== 11) { showError('phoneError', true); valid = false; } else showError('phoneError', false);
@@ -369,9 +399,46 @@ form.addEventListener('submit', (e) => {
   if (!guests) { showError('guestsError', true); valid = false; } else showError('guestsError', false);
   
   if (valid) {
-    const modal = document.getElementById('successModal');
-    if (modal) modal.classList.add('show');
-    form.reset();
+    const messageText = `
+☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ
+
+👤 Имя: ${name}
+ Телефон: +${phone}
+📅 Дата: ${date}
+🕒 Время: ${time}
+👥 Гостей: ${guests}
+💬 Комментарий: ${comment || '—'}
+
+📍 ${new Date().toLocaleString('ru-RU')}
+    `.trim();
+
+    try {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Отправка...';
+      submitBtn.disabled = true;
+
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ text: messageText }),
+      });
+
+      if (res.ok) {
+        document.getElementById('successModal').classList.add('show');
+        form.reset();
+        if (isTelegramApp) window.Telegram.WebApp.MainButton.hide();
+      } else {
+        alert('Ошибка при отправке. Позвоните нам: +7 (495) 123-45-67');
+      }
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+      alert('Ошибка при отправке. Позвоните нам: +7 (495) 123-45-67');
+    } finally {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.textContent = originalText || 'Отправить заявку';
+      submitBtn.disabled = false;
+    }
   }
 });
 
@@ -381,52 +448,27 @@ form.addEventListener('submit', (e) => {
   field.addEventListener('input', () => showError(`${id}Error`, false));
 });
 
-const modalClose = document.getElementById('modalClose');
-if (modalClose) {
-  modalClose.addEventListener('click', () => {
-    const modal = document.getElementById('successModal');
-    if (modal) modal.classList.remove('show');
-  });
-}
-
 const successModal = document.getElementById('successModal');
-if (successModal) {
-  successModal.addEventListener('click', (e) => {
-    if (e.target === successModal) successModal.classList.remove('show');
-  });
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    const modal = document.getElementById('successModal');
-    if (modal) modal.classList.remove('show');
-  }
+document.getElementById('modalClose')?.addEventListener('click', () => {
+  successModal?.classList.remove('show');
 });
 
-// ===== SMOOTH SCROLL =====
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener('click', (e) => {
-    const href = anchor.getAttribute('href');
-    if (!href) return;
-    const target = document.querySelector(href);
-    if (!target) return;
-    e.preventDefault();
-    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-  });
+successModal?.addEventListener('click', (e) => {
+  if (e.target === successModal) successModal.classList.remove('show');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') successModal?.classList.remove('show');
 });
 
 // ===== REDUCE MOTION =====
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const revealElements = document.querySelectorAll('.reveal, .reveal-line');
-  revealElements.forEach((el) => {
+  document.querySelectorAll('.reveal, .reveal-line').forEach((el) => {
     el.classList.add('is-visible');
     el.style.transition = 'none';
   });
-  const hero = document.querySelector('.hero');
-  const navEl = document.querySelector('nav');
-  const preloader = document.querySelector('.preloader');
-  if (hero) hero.classList.add('is-loaded');
-  if (navEl) navEl.classList.add('is-loaded');
-  if (preloader) preloader.classList.add('is-hidden');
+  document.querySelector('.hero')?.classList.add('is-loaded');
+  document.querySelector('nav')?.classList.add('is-loaded');
+  document.querySelector('.preloader')?.classList.add('is-hidden');
   document.body.classList.remove('is-loading');
 }
