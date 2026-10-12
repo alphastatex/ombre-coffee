@@ -99,5 +99,5 @@ ombre-coffee/
 ├── package.json            # Зависимости (serve, vitest, playwright)
 └── README.md               # Этот файл
 
-MIT © 2026 Кофейня Омбре
+MIT © 2026 alphastatex
 ```
