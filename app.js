@@ -530,3 +530,50 @@ setTimeout(() => {
   document.body.classList.remove('is-loading');
 }, 2500);
 // ==========================================
+// === ДИНАМИЧЕСКАЯ ЗАГРУЗКА TELEGRAM SDK (только внутри Telegram) ===
+function isTelegramWebApp() {
+  return window.Telegram && window.Telegram.WebApp;
+}
+
+function loadTelegramSDK() {
+  return new Promise((resolve, reject) => {
+    if (isTelegramWebApp()) {
+      resolve(window.Telegram.WebApp);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-web-app.js';
+    script.async = true;
+    
+    // Таймаут 3 секунды — если не загрузилось, отменяем
+    const timeout = setTimeout(() => {
+      reject(new Error('Telegram SDK timeout'));
+      script.remove();
+    }, 3000);
+    
+    script.onload = () => {
+      clearTimeout(timeout);
+      resolve(window.Telegram?.WebApp);
+    };
+    
+    script.onerror = () => {
+      clearTimeout(timeout);
+      reject(new Error('Telegram SDK failed to load'));
+    };
+    
+    document.head.appendChild(script);
+  });
+}
+
+// Загружаем SDK только если сайт открыт внутри Telegram
+if (navigator.userAgent.includes('Telegram') || window.location.hash.includes('tgWebAppData')) {
+  loadTelegramSDK()
+    .then(webApp => {
+      console.log('Telegram SDK loaded:', webApp);
+      // Здесь можешь инициализировать Telegram WebApp
+      if (webApp) webApp.ready();
+    })
+    .catch(err => console.log('Telegram SDK не загрузился:', err.message));
+}
+// ============================================
