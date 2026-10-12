@@ -68,7 +68,22 @@ document.addEventListener('mousemove', (e) => {
     cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
   }
 });
+// === СКРЫТИЕ КАСТОМНОГО КУРСОРА НАД SELECT'АМИ ===
+const formElements = document.querySelectorAll('select, input[type="date"], input[type="time"]');
 
+formElements.forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    document.body.classList.add('cursor-hidden');
+  });
+  
+  el.addEventListener('mouseleave', () => {
+    document.body.classList.remove('cursor-hidden');
+  });
+  
+  el.addEventListener('blur', () => {
+    document.body.classList.remove('cursor-hidden');
+  });
+});
 function animateRing() {
   ringX += (mouseX - ringX) * 0.15;
   ringY += (mouseY - ringY) * 0.15;

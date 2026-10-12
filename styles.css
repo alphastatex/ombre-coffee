@@ -1975,3 +1975,18 @@ footer {
     gap: 32px;
   }
 }
+/* Системный курсор над нативными элементами */
+select,
+input[type="date"],
+input[type="time"],
+input[type="file"],
+option {
+  cursor: default !important;
+}
+
+/* Скрываем кастомный курсор над select'ами */
+body.cursor-hidden .cursor-dot,
+body.cursor-hidden .cursor-ring {
+  opacity: 0;
+  pointer-events: none;
+}
