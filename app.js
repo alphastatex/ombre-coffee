@@ -472,3 +472,13 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.querySelector('.preloader')?.classList.add('is-hidden');
   document.body.classList.remove('is-loading');
 }
+// === СТРАХОВКА ОТ ЗАВИСАНИЯ ПРЕЛОАДЕРА ===
+window.addEventListener('load', () => {
+  document.body.classList.remove('is-loading');
+});
+
+// Если load не сработал за 2.5 секунды, снимаем принудительно
+setTimeout(() => {
+  document.body.classList.remove('is-loading');
+}, 2500);
+// ==========================================
