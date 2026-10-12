@@ -419,7 +419,7 @@
         </div>
       </div>
       <div class="map-container reveal">
-        <iframe src="https://yandex.ru/map-widget/v1/?ll=37.4913,55.7558&z=16&pt=37.4913,55.7558,pm2rdm" allowfullscreen></iframe>
+        <iframe loading="lazy" src="https://yandex.ru/map-widget/v1/?ll=37.4913,55.7558&z=16&pt=37.4913,55.7558,pm2rdm" allowfullscreen></iframe>
       </div>
     </div>
   </section>
@@ -479,7 +479,14 @@
       <button class="modal-close" id="modalClose">Закрыть</button>
     </div>
   </div>
-<script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+<script>
+  window.addEventListener('load', () => {
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-web-app.js';
+    script.async = true;
+    document.body.appendChild(script);
+  });
+</script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
