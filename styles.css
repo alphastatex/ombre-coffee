@@ -517,7 +517,34 @@ nav.is-loaded .logo span {
   position: relative;
   height: 620px;
 }
+/* === BLUR-UP ЭФФЕКТ ДЛЯ ХИРО === */
+.hero-image-main,
+.hero-image-accent {
+  filter: blur(20px) brightness(1.1);
+  opacity: 0;
+  transform: scale(1.08);
+  transition: filter 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 1.2s ease,
+              transform 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
+.hero-image-main.is-loaded,
+.hero-image-accent.is-loaded {
+  filter: blur(0) brightness(1);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-image-accent {
+  transition-delay: 0.3s; /* вторая картинка появляется с задержкой */
+}
+
+/* Обрезаем размытие по краям */
+.hero-image-wrapper,
+.hero-image-accent-wrapper {
+  overflow: hidden;
+  border-radius: 4px;
+}
 .hero-image-wrapper {
   position: relative;
   width: 100%;

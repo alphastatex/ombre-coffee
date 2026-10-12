@@ -2,7 +2,35 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.remove('is-loading');
 });
+// === BLUR-UP АНИМАЦИЯ ДЛЯ ХИРО-ФОТО ===
+function initHeroBlurUp() {
+  const heroImages = document.querySelectorAll('.hero-image-main, .hero-image-accent');
+  
+  heroImages.forEach((img, index) => {
+    // Если картинка уже загружена (из кэша)
+    if (img.complete) {
+      setTimeout(() => {
+        img.classList.add('is-loaded');
+      }, 300 + (index * 300)); // задержка для эффекта "проявления"
+      return;
+    }
+    
+    // Ждём загрузки
+    img.addEventListener('load', () => {
+      setTimeout(() => {
+        img.classList.add('is-loaded');
+      }, 300 + (index * 300));
+    });
+    
+    // На случай ошибки загрузки
+    img.addEventListener('error', () => {
+      img.classList.add('is-loaded'); // показываем как есть
+    });
+  });
+}
 
+// Запускаем после загрузки DOM
+document.addEventListener('DOMContentLoaded', initHeroBlurUp);
 setTimeout(() => {
   document.body.classList.remove('is-loading');
 }, 2000);
