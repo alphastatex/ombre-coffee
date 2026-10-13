@@ -368,10 +368,13 @@ function updateDots() {
 }
 
 function updateCarousel() {
-  const firstCard = track.children[0];
-  const cardWidth = firstCard instanceof HTMLElement ? firstCard.offsetWidth + 40 : 0;
-  track.style.transform = `translateX(-${currentIndex * slidesPerView * cardWidth}px)`;
-  updateDots();
+    const firstCard = track.children[0];
+    if (!firstCard) return;
+    const style = window.getComputedStyle(firstCard);
+    const marginRight = parseFloat(style.marginRight) || 0;
+    const cardWidth = firstCard.offsetWidth + marginRight;
+    track.style.transform = `translateX(-${currentIndex * slidesPerView * cardWidth}px)`;
+    updateDots();
 }
 
 function nextSlide() {

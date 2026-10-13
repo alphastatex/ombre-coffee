@@ -282,6 +282,7 @@ nav.is-loaded .logo span { transform: translateY(0); }
   position: relative;
   overflow: hidden;
   display: inline-block;
+  cursor: none;
 }
 
 .nav-links a .link-text {
@@ -1339,7 +1340,7 @@ section { padding: 120px 60px; }
   color: var(--text);
   transition: border-color 0.3s;
   font-weight: 300;
-  cursor: none;
+  cursor: text;
 }
 
 .form-group input:focus,
@@ -1689,26 +1690,29 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .review-card {
-    min-width: 100% !important;
-    margin-right: 0 !important;
-    padding: 24px 20px !important;
-  }
-  
-  .carousel-track { padding: 0 16px !important; }
-  
-  .review-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  
-  .review-avatar { width: 40px; height: 40px; }
-  .review-name { font-size: 15px; }
-  .review-text { font-size: 14px; line-height: 1.6; }
-  
-  .location-card { padding: 32px 24px; }
-  .location-row { grid-template-columns: 1fr; gap: 32px; }
+    .booking-form {
+        padding: 32px 24px !important;
+    }
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+    .review-card {
+        min-width: 100% !important;
+        margin-right: 0 !important;
+        padding: 24px 20px !important;
+    }
+    .carousel-track { padding: 0 16px !important; }
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .review-avatar { width: 40px; height: 40px; }
+    .review-name { font-size: 15px; }
+    .review-text { font-size: 14px; line-height: 1.6; }
+    .location-card { padding: 32px 24px; }
+    .location-row { grid-template-columns: 1fr; gap: 32px; }
 }
 
 @media (max-width: 480px) {
