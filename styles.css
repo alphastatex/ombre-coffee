@@ -1715,3 +1715,7 @@ footer {
   .footer-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr; }
 }
+/* === ИСПРАВЛЕНИЕ КУРСОРА НА ФОРМЕ === */
+body.cursor-hidden {
+  cursor: auto !important;
+}
