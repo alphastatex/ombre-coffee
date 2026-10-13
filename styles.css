@@ -1703,3 +1703,8 @@ footer {
   .footer-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr; }
 }
+/* === ИСПРАВЛЕНИЕ КУРСОРА НА ФОРМЕ === */
+/* Когда JS добавляет класс cursor-hidden, возвращаем обычную стрелочку */
+body.cursor-hidden {
+  cursor: auto !important;
+}
