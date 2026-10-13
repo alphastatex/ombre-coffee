@@ -514,7 +514,7 @@ nav.is-loaded .logo span { transform: translateY(0); }
   100% { transform: translateY(-80px) scale(2); opacity: 0; }
 }
 
-/* === HERO IMAGES (Blur-up) === */
+/* === HERO IMAGES === */
 .hero-image {
   position: relative;
   height: 620px;
@@ -1714,8 +1714,4 @@ footer {
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr; }
-}
-/* === ИСПРАВЛЕНИЕ КУРСОРА НА ФОРМЕ === */
-body.cursor-hidden {
-  cursor: auto !important;
 }

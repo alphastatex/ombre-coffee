@@ -10,7 +10,7 @@ function isTelegramMiniApp() {
 
 const IS_TG_APP = isTelegramMiniApp();
 
-// === БЫСТРАЯ ИНИЦИАЛИЗАЦИЯ (снимаем прелоадер) ===
+// === БЫСТРАЯ ИНИЦИАЛИЗАЦИЯ ===
 function removePreloader() {
   document.body.classList.remove('is-loading');
   const preloader = document.querySelector('.preloader');
@@ -26,28 +26,23 @@ function removePreloader() {
   }, 800);
 }
 
-// Страховка: снимаем прелоадер максимум через 2.5 секунды
 setTimeout(removePreloader, 2500);
 
-// === TELEGRAM MINI APP: ИНИЦИАЛИЗАЦИЯ (ОДИН БЛОК) ===
+// === TELEGRAM MINI APP ===
 if (IS_TG_APP) {
-  // Добавляем класс для CSS (отключает кастомный курсор)
   document.body.classList.add('telegram-mini-app');
   
-  // Говорим Телеграму, что сайт загружен (иначе будет крутить спиннер)
   if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
     
-    // Автозаполнение имени из Telegram
     const nameInput = document.getElementById('name');
     if (tg.initDataUnsafe?.user?.first_name && nameInput) {
       nameInput.value = tg.initDataUnsafe.user.first_name;
       nameInput.readOnly = true;
     }
     
-    // Настраиваем MainButton
     tg.MainButton.setText('ОТПРАВИТЬ ЗАЯВКУ');
     tg.MainButton.setTextColor('#ffffff');
     tg.MainButton.setColor('#8b6f47');
@@ -57,19 +52,15 @@ if (IS_TG_APP) {
       if (submitBtn) submitBtn.click();
     });
   }
-  
-  console.log('✓ Telegram Mini App инициализирован');
 }
 
-// === BLUR-UP АНИМАЦИЯ ДЛЯ ХИРО-ФОТО ===
+// === BLUR-UP ===
 function initHeroBlurUp() {
   const heroImages = document.querySelectorAll('.hero-image-main, .hero-image-accent');
-  
   heroImages.forEach((img, index) => {
     const showImage = () => {
       setTimeout(() => img.classList.add('is-loaded'), 200 + (index * 200));
     };
-    
     if (img.complete) {
       showImage();
     } else {
@@ -108,7 +99,6 @@ if (!IS_TG_APP) {
   }
   animateRing();
   
-  // Hover эффекты
   const hoverTargets = document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card, input, select, textarea');
   hoverTargets.forEach((el) => {
     el.addEventListener('mouseenter', () => {
@@ -135,7 +125,6 @@ if (!IS_TG_APP) {
     });
   });
   
-  // Скрытие курсора над нативными элементами (select, date)
   const formElements = document.querySelectorAll('select, input[type="date"], input[type="time"]');
   formElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -152,7 +141,6 @@ if (!IS_TG_APP) {
     });
   });
   
-  // Страховка: возвращаем курсор при движении мыши вне формы
   document.addEventListener('mousemove', (e) => {
     const isOverForm = e.target.closest('select, input[type="date"], input[type="time"]');
     if (!isOverForm && cursorHidden) {
@@ -162,7 +150,7 @@ if (!IS_TG_APP) {
   });
 }
 
-// === PRELOADER (load event) ===
+// === PRELOADER ===
 window.addEventListener('load', () => {
   removePreloader();
   initHeroBlurUp();
@@ -346,7 +334,6 @@ const nextBtn = document.getElementById('nextBtn');
 const container = document.getElementById('carouselContainer');
 
 let currentIndex = 0;
-// В Mini App всегда 1 слайд, иначе считаем по ширине экрана
 let slidesPerView = IS_TG_APP ? 1 : (window.innerWidth <= 968 ? 1 : window.innerWidth <= 1200 ? 2 : 3);
 let autoPlayInterval;
 
@@ -370,7 +357,6 @@ function renderReviews() {
       <div class="review-text">${r.text}</div>
     </div>
   `).join('');
-  
   updateDots();
 }
 
@@ -508,7 +494,7 @@ form.addEventListener('submit', async (e) => {
   
   if (!valid) return;
   
-  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n📅 Дата: ${date}\n🕒 Время: ${time}\n Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n ${new Date().toLocaleString('ru-RU')}`.trim();
+  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n Дата: ${date}\n🕒 Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n📍 ${new Date().toLocaleString('ru-RU')}`.trim();
   
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
@@ -517,7 +503,6 @@ form.addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Отправка...';
     submitBtn.disabled = true;
     
-    // Таймаут 10 секунд — если сервер не отвечает, отменяем
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
     
@@ -548,7 +533,6 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// Очистка ошибок при вводе
 ['name', 'phone', 'date', 'time', 'guests'].forEach((id) => {
   const field = document.getElementById(id);
   if (field) {
@@ -556,7 +540,6 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// Modal
 const successModal = document.getElementById('successModal');
 document.getElementById('modalClose')?.addEventListener('click', () => {
   successModal?.classList.remove('show');
