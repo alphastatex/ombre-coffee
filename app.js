@@ -276,15 +276,15 @@ document.addEventListener('keydown', (e) => {
 
 // ===== REVIEWS =====
 const reviews = [
-  { name: 'Анна К.', avatar: 'https://i.pravatar.cc/150?img=1', text: 'Наконец-то нашла место в нашем районе, где кофе действительно вкусный! Бариста всегда приветливые, а круассаны — просто космос.' },
-  { name: 'Дмитрий М.', avatar: 'https://i.pravatar.cc/150?img=3', text: 'Прихожу сюда каждое утро перед работой. Атмосфера потрясающая — спокойно, уютно, никто не торопит.' },
-  { name: 'Елена С.', avatar: 'https://i.pravatar.cc/150?img=5', text: 'Обожаю их десерты! Чизкейк просто тает во рту. И очень нравится, что есть своя пекарня.' },
-  { name: 'Максим В.', avatar: 'https://i.pravatar.cc/150?img=7', text: 'Отличное место для удаленки. Wi-Fi летает, розетки у каждого стола. Флэт уайт здесь эталонный.' },
-  { name: 'София Л.', avatar: 'https://i.pravatar.cc/150?img=9', text: 'Заходили с мужем случайно. Влюбились в интерьер! Очень светло, много дерева, пахнет свежей выпечкой.' },
-  { name: 'Игорь П.', avatar: 'https://i.pravatar.cc/150?img=11', text: 'Как кофейный сноб со стажем, могу сказать: зерно у ребят топовое. Бариста Артем вообще красавчик.' },
-  { name: 'Мария Т.', avatar: 'https://i.pravatar.cc/150?img=13', text: 'Спасли мой день! Бежала на встречу, забыла про обед. Взяла здесь авокадо-тост и латте с собой.' },
-  { name: 'Алексей Р.', avatar: 'https://i.pravatar.cc/150?img=15', text: 'Хорошая кофейня в спальном районе. Цены адекватные для Москвы, порции большие. Сырники детям зашли.' },
-  { name: 'Виктория Б.', avatar: 'https://i.pravatar.cc/150?img=16', text: 'Атмосфера 10/10. Идеально, чтобы почитать книгу или поболтать с подругой. Раф с лавандой — мой фаворит.' }
+  { name: 'Анна К.', avatar: 'https://i.pravatar.cc/80?img=1', text: 'Наконец-то нашла место в нашем районе, где кофе действительно вкусный! Бариста всегда приветливые, а круассаны — просто космос.' },
+  { name: 'Дмитрий М.', avatar: 'https://i.pravatar.cc/80?img=3', text: 'Прихожу сюда каждое утро перед работой. Атмосфера потрясающая — спокойно, уютно, никто не торопит.' },
+  { name: 'Елена С.', avatar: 'https://i.pravatar.cc/80?img=5', text: 'Обожаю их десерты! Чизкейк просто тает во рту. И очень нравится, что есть своя пекарня.' },
+  { name: 'Максим В.', avatar: 'https://i.pravatar.cc/80?img=7', text: 'Отличное место для удаленки. Wi-Fi летает, розетки у каждого стола. Флэт уайт здесь эталонный.' },
+  { name: 'София Л.', avatar: 'https://i.pravatar.cc/80?img=9', text: 'Заходили с мужем случайно. Влюбились в интерьер! Очень светло, много дерева, пахнет свежей выпечкой.' },
+  { name: 'Игорь П.', avatar: 'https://i.pravatar.cc/80?img=11', text: 'Как кофейный сноб со стажем, могу сказать: зерно у ребят топовое. Бариста Артем вообще красавчик.' },
+  { name: 'Мария Т.', avatar: 'https://i.pravatar.cc/80?img=13', text: 'Спасли мой день! Бежала на встречу, забыла про обед. Взяла здесь авокадо-тост и латте с собой.' },
+  { name: 'Алексей Р.', avatar: 'https://i.pravatar.cc/80?img=15', text: 'Хорошая кофейня в спальном районе. Цены адекватные для Москвы, порции большие. Сырники детям зашли.' },
+  { name: 'Виктория Б.', avatar: 'https://i.pravatar.cc/80?img=16', text: 'Атмосфера 10/10. Идеально, чтобы почитать книгу или поболтать с подругой. Раф с лавандой — мой фаворит.' }
 ];
 
 const coffeeCupSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" fill="currentColor"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>`;
@@ -307,9 +307,10 @@ function getSlidesPerView() {
 
 function renderReviews() {
   track.innerHTML = reviews.map(r => `
-    <div class="review-card">
-      <div class="review-header">
-        <img src="${r.avatar}" alt="${r.name}" class="review-avatar">
+  <div class="review-card">
+    <div class="review-header">
+      <img src="${r.avatar}" alt="${r.name}" class="review-avatar" loading="lazy">
+      ...
         <div>
           <div class="review-name">${r.name}</div>
           <div class="review-cups">${cupsHTML}</div>
