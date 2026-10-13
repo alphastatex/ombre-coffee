@@ -508,7 +508,7 @@ form.addEventListener('submit', async (e) => {
   
   if (!valid) return;
   
-  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n📅 Дата: ${date}\n🕒 Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n📍 ${new Date().toLocaleString('ru-RU')}`.trim();
+  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n📅 Дата: ${date}\n🕒 Время: ${time}\n Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n ${new Date().toLocaleString('ru-RU')}`.trim();
   
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;

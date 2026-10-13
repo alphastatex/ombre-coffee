@@ -514,7 +514,7 @@ nav.is-loaded .logo span { transform: translateY(0); }
   100% { transform: translateY(-80px) scale(2); opacity: 0; }
 }
 
-/* === HERO IMAGES === */
+/* === HERO IMAGES (Blur-up) === */
 .hero-image {
   position: relative;
   height: 620px;
