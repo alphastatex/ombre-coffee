@@ -101,7 +101,7 @@ if (!IS_TG_APP) {
   }
   animateRing();
   
-  const hoverTargets = document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card');
+  const hoverTargets = document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card, input, select, textarea');
   hoverTargets.forEach((el) => {
     el.addEventListener('mouseenter', () => {
       if (cursorDot) cursorDot.classList.add('is-hover');
@@ -110,6 +110,20 @@ if (!IS_TG_APP) {
     el.addEventListener('mouseleave', () => {
       if (cursorDot) cursorDot.classList.remove('is-hover');
       if (cursorRing) cursorRing.classList.remove('is-hover');
+    });
+  });
+  
+  document.querySelectorAll('.gallery-item').forEach((el) => {
+    el.addEventListener('mouseenter', () => {
+      if (cursorDot) cursorDot.classList.add('is-hover');
+      if (cursorRing) {
+        cursorRing.classList.remove('is-hover');
+        cursorRing.classList.add('is-hover-text');
+      }
+    });
+    el.addEventListener('mouseleave', () => {
+      if (cursorDot) cursorDot.classList.remove('is-hover');
+      if (cursorRing) cursorRing.classList.remove('is-hover-text');
     });
   });
   
@@ -144,19 +158,36 @@ window.addEventListener('load', () => {
   initHeroBlurUp();
 });
 
+// === MAGNETIC ===
+const magneticButtons = document.querySelectorAll('[data-magnetic]');
+magneticButtons.forEach((btn) => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = 'translate(0, 0)';
+  });
+});
+
 // === SCROLL PROGRESS ===
 const scrollProgress = document.querySelector('.scroll-progress');
-const nav = document.querySelector('nav');
-const scrollTopBtn = document.getElementById('scrollTop');
-
 window.addEventListener('scroll', () => {
   const scrolled = window.scrollY;
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   if (scrollProgress) {
     scrollProgress.style.width = `${(scrolled / maxScroll) * 100}%`;
   }
-  if (nav) nav.classList.toggle('is-scrolled', scrolled > 50);
-  if (scrollTopBtn) scrollTopBtn.classList.toggle('is-visible', scrolled > 500);
+});
+
+// === NAV SCROLL ===
+const nav = document.querySelector('nav');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  if (nav) nav.classList.toggle('is-scrolled', window.scrollY > 50);
+  if (scrollTopBtn) scrollTopBtn.classList.toggle('is-visible', window.scrollY > 500);
 });
 
 if (scrollTopBtn) {
@@ -175,9 +206,39 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
-document.querySelectorAll('.reveal').forEach((el) => {
+document.querySelectorAll('.reveal, .about-image, .section-label').forEach((el) => {
   revealObserver.observe(el);
 });
+
+const galleryReveals = document.querySelectorAll('.gallery-item.reveal');
+galleryReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
+
+const menuReveals = document.querySelectorAll('.menu-category.reveal');
+menuReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.15}s`; });
+
+const statReveals = document.querySelectorAll('.stat-item.reveal');
+statReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
+
+// === PARALLAX ===
+const parallaxElements = document.querySelectorAll('[data-parallax]');
+let parallaxTicking = false;
+const baseScrollY = window.scrollY;
+
+function updateParallax() {
+  const delta = window.scrollY - baseScrollY;
+  parallaxElements.forEach((el) => {
+    const speed = parseFloat(el.dataset.parallax || '0');
+    el.style.transform = `translate3d(0, ${delta * speed}px, 0)`;
+  });
+  parallaxTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!parallaxTicking) {
+    requestAnimationFrame(updateParallax);
+    parallaxTicking = true;
+  }
+}, { passive: true });
 
 // === COUNTER ===
 const counterObserver = new IntersectionObserver((entries) => {
@@ -203,9 +264,7 @@ const counterObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('[data-counter]').forEach((el) => {
-  counterObserver.observe(el);
-});
+document.querySelectorAll('[data-counter]').forEach((el) => { counterObserver.observe(el); });
 
 // === LIGHTBOX ===
 const lightbox = document.getElementById('lightbox');
@@ -256,15 +315,15 @@ document.addEventListener('keydown', (e) => {
 
 // === REVIEWS CAROUSEL ===
 const reviews = [
-  { name: 'Анна К.', avatar: 'https://i.pravatar.cc/80?img=1', text: 'Наконец-то нашла место в нашем районе, где кофе действительно вкусный!' },
-  { name: 'Дмитрий М.', avatar: 'https://i.pravatar.cc/80?img=3', text: 'Прихожу сюда каждое утро перед работой. Атмосфера потрясающая.' },
-  { name: 'Елена С.', avatar: 'https://i.pravatar.cc/80?img=5', text: 'Обожаю их десерты! Чизкейк просто тает во рту.' },
-  { name: 'Максим В.', avatar: 'https://i.pravatar.cc/80?img=7', text: 'Отличное место для удаленки. Wi-Fi летает.' },
-  { name: 'София Л.', avatar: 'https://i.pravatar.cc/80?img=9', text: 'Заходили с мужем случайно. Влюбились в интерьер!' },
-  { name: 'Игорь П.', avatar: 'https://i.pravatar.cc/80?img=11', text: 'Как кофейный сноб со стажем, зерно у ребят топовое.' },
-  { name: 'Мария Т.', avatar: 'https://i.pravatar.cc/80?img=13', text: 'Спасли мой день! Взяла здесь авокадо-тост и латте.' },
-  { name: 'Алексей Р.', avatar: 'https://i.pravatar.cc/80?img=15', text: 'Хорошая кофейня в спальном районе. Цены адекватные.' },
-  { name: 'Виктория Б.', avatar: 'https://i.pravatar.cc/80?img=16', text: 'Атмосфера 10/10. Раф с лавандой — мой фаворит.' }
+  { name: 'Анна К.', avatar: 'https://i.pravatar.cc/80?img=1', text: 'Наконец-то нашла место в нашем районе, где кофе действительно вкусный! Бариста всегда приветливые, а круассаны — просто космос.' },
+  { name: 'Дмитрий М.', avatar: 'https://i.pravatar.cc/80?img=3', text: 'Прихожу сюда каждое утро перед работой. Атмосфера потрясающая — спокойно, уютно, никто не торопит.' },
+  { name: 'Елена С.', avatar: 'https://i.pravatar.cc/80?img=5', text: 'Обожаю их десерты! Чизкейк просто тает во рту. И очень нравится, что есть своя пекарня.' },
+  { name: 'Максим В.', avatar: 'https://i.pravatar.cc/80?img=7', text: 'Отличное место для удаленки. Wi-Fi летает, розетки у каждого стола. Флэт уайт здесь эталонный.' },
+  { name: 'София Л.', avatar: 'https://i.pravatar.cc/80?img=9', text: 'Заходили с мужем случайно. Влюбились в интерьер! Очень светло, много дерева, пахнет свежей выпечкой.' },
+  { name: 'Игорь П.', avatar: 'https://i.pravatar.cc/80?img=11', text: 'Как кофейный сноб со стажем, могу сказать: зерно у ребят топовое. Бариста Артем вообще красавчик.' },
+  { name: 'Мария Т.', avatar: 'https://i.pravatar.cc/80?img=13', text: 'Спасли мой день! Бежала на встречу, забыла про обед. Взяла здесь авокадо-тост и латте с собой.' },
+  { name: 'Алексей Р.', avatar: 'https://i.pravatar.cc/80?img=15', text: 'Хорошая кофейня в спальном районе. Цены адекватные для Москвы, порции большие. Сырники детям зашли.' },
+  { name: 'Виктория Б.', avatar: 'https://i.pravatar.cc/80?img=16', text: 'Атмосфера 10/10. Идеально, чтобы почитать книгу или поболтать с подругой. Раф с лавандой — мой фаворит.' }
 ];
 
 const coffeeCupSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" fill="currentColor"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>`;
@@ -277,7 +336,7 @@ const nextBtn = document.getElementById('nextBtn');
 const container = document.getElementById('carouselContainer');
 
 let currentIndex = 0;
-let slidesPerView = IS_TG_APP ? 1 : 3;
+let slidesPerView = IS_TG_APP ? 1 : (window.innerWidth <= 968 ? 1 : window.innerWidth <= 1200 ? 2 : 3);
 let autoPlayInterval;
 
 function getSlidesPerView() {
@@ -307,7 +366,7 @@ function renderReviews() {
 function updateDots() {
   const totalSlides = Math.ceil(reviews.length / slidesPerView);
   dotsContainer.innerHTML = Array.from({ length: totalSlides }, (_, i) =>
-    `<div class="dot ${i === currentIndex ? 'active' : ''}" data-index="${i}"></div>`
+    `<div class="dot ${i === currentIndex ? 'active' : ''}" data-index="${i}" role="tab" aria-label="Слайд ${i + 1}"></div>`
   ).join('');
 }
 
@@ -385,6 +444,7 @@ const phoneInput = document.getElementById('phone');
 const dateInput = document.getElementById('date');
 const timeSelect = document.getElementById('time');
 const guestsSelect = document.getElementById('guests');
+const commentInput = document.getElementById('comment');
 const PROXY_URL = 'https://tg-ombre-proxy.alphastatex.workers.dev';
 
 phoneInput.addEventListener('input', () => {
@@ -396,10 +456,9 @@ dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
 function showError(id, show) {
   const message = document.getElementById(id);
   const input = document.getElementById(id.replace('Error', ''));
-  if (message && input) {
-    message.classList.toggle('show', show);
-    input.classList.toggle('error', show);
-  }
+  if (!message || !input) return;
+  message.classList.toggle('show', show);
+  input.classList.toggle('error', show);
 }
 
 form.addEventListener('submit', async (e) => {
@@ -411,7 +470,7 @@ form.addEventListener('submit', async (e) => {
   const date = dateInput.value;
   const time = timeSelect.value;
   const guests = guestsSelect.value;
-  const comment = document.getElementById('comment').value.trim();
+  const comment = commentInput.value.trim();
   
   if (name.length < 2) { showError('nameError', true); valid = false; } else showError('nameError', false);
   if (phone.length !== 11) { showError('phoneError', true); valid = false; } else showError('phoneError', false);
@@ -421,7 +480,7 @@ form.addEventListener('submit', async (e) => {
   
   if (!valid) return;
   
-  const messageText = `🆕 НОВАЯ ЗАЯВКА — ОМБРЕ\n👤 ${name}\n📞 +${phone}\n📅 ${date} ${time}\n ${guests}\n💬 ${comment || '—'}`;
+  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n📅 Дата: ${date}\n Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n📍 ${new Date().toLocaleString('ru-RU')}`.trim();
   
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
@@ -479,3 +538,15 @@ successModal?.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') successModal?.classList.remove('show');
 });
+
+// === REDUCE MOTION ===
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.reveal, .about-image').forEach((el) => {
+    el.classList.add('is-visible');
+    el.style.transition = 'none';
+  });
+  document.querySelector('.hero')?.classList.add('is-loaded');
+  document.querySelector('nav')?.classList.add('is-loaded');
+  document.querySelector('.preloader')?.classList.add('is-hidden');
+  document.body.classList.remove('is-loading');
+}
