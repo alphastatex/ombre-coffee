@@ -62,6 +62,11 @@ body.telegram-mini-app textarea {
   cursor: text !important;
 }
 
+/* === ИСПРАВЛЕНИЕ КУРСОРА НА ФОРМЕ === */
+body.cursor-hidden {
+  cursor: auto !important;
+}
+
 /* === GRAIN === */
 .grain {
   position: fixed;
@@ -152,11 +157,6 @@ body.telegram-mini-app textarea {
 @media (hover: none) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
-}
-
-/* === ИСПРАВЛЕНИЕ КУРСОРА НА ФОРМЕ === */
-body.cursor-hidden {
-  cursor: auto !important;
 }
 
 /* === PRELOADER === */
@@ -1656,6 +1656,12 @@ footer {
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-dark); }
 
 /* === RESPONSIVE === */
+@media (max-width: 1200px) {
+  .review-card {
+    min-width: calc(50% - 20px);
+  }
+}
+
 @media (max-width: 968px) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
@@ -1673,10 +1679,6 @@ footer {
   .about-grid { grid-template-columns: 1fr; gap: 50px; }
   .menu-grid { grid-template-columns: 1fr; gap: 40px; }
   .gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  
-  .review-card {
-    min-width: calc(50% - 20px);
-  }
   
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
   .stat-item:not(:last-child)::after { display: none; }
