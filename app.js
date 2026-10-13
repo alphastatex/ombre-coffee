@@ -55,6 +55,27 @@ window.addEventListener('load', () => {
   }, 1800);
 });
 
+// === ОТКЛЮЧЕНИЕ КАСТОМНОГО КУРСОРА В TELEGRAM MINI APP ===
+function isTelegramMiniApp() {
+  return window.Telegram?.WebApp || 
+         navigator.userAgent.includes('Telegram') ||
+         window.location.hash.includes('tgWebAppData');
+}
+
+if (isTelegramMiniApp()) {
+  // Скрываем элементы курсора
+  const cursorElements = document.querySelectorAll('.cursor-dot, .cursor-ring');
+  cursorElements.forEach(el => el.style.display = 'none');
+  
+  // Возвращаем системный курсор везде
+  document.body.style.cursor = 'auto';
+  
+  // Отключаем все обработчики мыши для курсора
+  document.removeEventListener('mousemove', window.cursorMouseMoveHandler);
+  
+  console.log('Кастомный курсор отключен в Telegram Mini App');
+}
+// ============================================
 // ===== CURSOR =====
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorRing = document.querySelector('.cursor-ring');
