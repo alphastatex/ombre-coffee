@@ -1,6 +1,6 @@
 export default {
-  async fetch(request, env) {
-    // 1. ПРАВИЛЬНЫЕ CORS-ЗАГОЛОВКИ (разрешаем Authorization)
+  // Добавили ctx (третий аргумент) для функции waitUntil
+  async fetch(request, env, ctx) {
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
@@ -25,7 +25,7 @@ export default {
 
     try {
       // ==========================================
-      // АДМИНКА: Получение списка заявок (GET)
+      // 1. АДМИНКА: Получение списка заявок (GET)
       // ==========================================
       if (path === '/api/applications' && method === 'GET') {
         if (!isAdmin(request)) {
@@ -49,7 +49,7 @@ export default {
       }
 
       // ==========================================
-      // АДМИНКА: Обновление статуса (PATCH)
+      // 2. АДМИНКА: Обновление статуса (PATCH)
       // ==========================================
       if (path.startsWith('/api/applications/') && method === 'PATCH') {
         if (!isAdmin(request)) {
@@ -79,7 +79,7 @@ export default {
       }
 
       // ==========================================
-      // АДМИНКА: Удаление заявки (DELETE)
+      // 3. АДМИНКА: Удаление заявки (DELETE)
       // ==========================================
       if (path.startsWith('/api/applications/') && method === 'DELETE') {
         if (!isAdmin(request)) {
@@ -93,7 +93,7 @@ export default {
       }
 
       // ==========================================
-      // САЙТ: Отправка новой заявки (POST)
+      // 4. САЙТ: Отправка новой заявки (POST)
       // ==========================================
       if (path === '/' && method === 'POST') {
         const data = await request.json();
@@ -145,19 +145,29 @@ export default {
           await env.APPLICATIONS.put(applicationId, JSON.stringify(dataToSave));
         }
 
-        // Отправляем в Telegram
-        const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: env.CHAT_ID, text, parse_mode: 'HTML' }),
-        });
+        // ОТПРАВЛЯЕМ В TELEGRAM АСИНХРОННО (в фоне)
+        // Благодаря этому форма ответит моментально, и таймаут не сработает
+        ctx.waitUntil((async () => {
+          try {
+            const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: env.CHAT_ID, text, parse_mode: 'HTML' }),
+            });
+            const result = await tgRes.json();
+            if (!result.ok) {
+              console.error("Ошибка Telegram API:", result.description);
+            }
+          } catch (err) {
+            console.error("Сбой сети при отправке в Telegram:", err.message);
+          }
+        })());
 
-        const result = await tgRes.json();
-        if (result.ok) {
-          return new Response(JSON.stringify({ success: true, id: applicationId }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
-        } else {
-          throw new Error(result.description);
-        }
+        // МГНОВЕННО возвращаем ответ браузеру
+        return new Response(JSON.stringify({ success: true, id: applicationId }), { 
+          status: 200, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        });
       }
 
       return new Response('Not Found', { status: 404, headers: corsHeaders });
