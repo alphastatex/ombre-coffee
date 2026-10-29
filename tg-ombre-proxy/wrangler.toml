@@ -1,0 +1,6 @@
+name = "tg-ombre-proxy"
+main = "src/index.js"
+compatibility_date = "2026-10-10"
+[[kv_namespaces]]
+binding = "APPLICATIONS"
+id = "227c6c6bd3cb4b90aae69d7baa728ec0"

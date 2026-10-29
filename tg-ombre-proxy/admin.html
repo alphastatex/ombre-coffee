@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель · Кофейня Омбре</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #fafaf7; --text: #111110; --muted: #6b6b68; --accent: #ff3d00;
+      --border: #e5e5e0; --success: #2ecc71; --warning: #f1c40f; --danger: #e74c3c;
+      --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif;
+    }
+    body { font-family: var(--sans); font-weight: 300; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+    
+    /* ICONS */
+    .icon { width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .status-icon { width: 12px; height: 12px; margin-right: 6px; vertical-align: middle; }
+
+    /* LOGIN */
+    .login-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .login-box { background: white; padding: 48px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; }
+    .login-box h1 { font-size: 24px; font-weight: 500; margin-bottom: 8px; }
+    .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+    .login-box input { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--mono); font-size: 14px; margin-bottom: 20px; }
+    .login-box input:focus { outline: none; border-color: var(--accent); }
+    .login-box button { width: 100%; padding: 14px; background: var(--text); color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .login-box button:hover { background: var(--accent); }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 12px; display: none; }
+
+    /* ADMIN */
+    .admin-container { display: none; padding: 40px 60px; max-width: 1400px; margin: 0 auto; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .admin-header h1 { font-size: 32px; font-weight: 400; }
+    .admin-header .stats { font-family: var(--mono); font-size: 14px; color: var(--muted); margin-top: 4px; }
+    .admin-header .actions { display: flex; gap: 12px; }
+
+    .btn { padding: 10px 20px; border: 1px solid var(--border); background: white; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-danger { border-color: var(--danger); color: var(--danger); }
+    .btn-danger:hover { background: var(--danger); color: white; }
+
+    /* TABLE */
+    .applications-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .applications-table th, .applications-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+    .applications-table th { background: #f8f8f5; font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .applications-table tr:hover { background: #fafafa; }
+    .applications-table td { font-size: 14px; }
+    .applications-table .date { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .applications-table .name { font-weight: 500; }
+    .applications-table .phone { font-family: var(--mono); font-size: 13px; }
+
+    .status-select option { padding: 8px 12px; background: white; }
+    .status-new .status-icon { color: #856404; }
+    .status-progress .status-icon { color: #0c5460; }
+    .status-done .status-icon { color: #155724; }
+
+    .delete-btn { padding: 6px 12px; background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .delete-btn:hover { background: var(--danger); color: white; }
+
+    .empty-state, .loading { text-align: center; padding: 80px 20px; color: var(--muted); }
+    .empty-state h2 { font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+
+    @media (max-width: 768px) {
+      .admin-container { padding: 20px; }
+      .admin-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+      .applications-table { font-size: 12px; }
+      .applications-table th, .applications-table td { padding: 12px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container" id="loginScreen">
+    <div class="login-box">
+      <h1>Админ-панель</h1>
+      <p>Кофейня Омбре · Вход для администратора</p>
+      <input type="password" id="passwordInput" placeholder="Введите пароль">
+      <button id="loginBtn" onclick="login()">Войти</button>
+      <div class="login-error" id="loginError">Неверный пароль</div>
+    </div>
+  </div>
+
+  <div class="admin-container" id="adminPanel">
+    <div class="admin-header">
+      <div>
+        <h1>Заявки на бронирование</h1>
+        <div class="stats" id="statsText">Загрузка...</div>
+      </div>
+      <div class="actions">
+      <button class="btn" onclick="exportCSV()">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Экспорт CSV
+      </button>
+      <button class="btn" onclick="loadApplications()">
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        Обновить
+      </button>
+      <button class="btn btn-danger" onclick="logout()">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Выйти
+      </button>
+      </div>
+    </div>
+    <div id="content"><div class="loading">Загрузка заявок...</div></div>
+  </div>
+
+  <script>
+    const WORKER_URL = 'https://tg-ombre-proxy.alphastatex.workers.dev';
+    let currentPassword = '';
+    let currentApps = [];
+
+    window.addEventListener('load', () => {
+      const savedPassword = sessionStorage.getItem('adminPassword');
+      if (savedPassword) { currentPassword = savedPassword; showAdminPanel(); }
+    });
+
+    async function login() {
+      const password = document.getElementById('passwordInput').value;
+      const loginBtn = document.getElementById('loginBtn');
+      
+      if (!password) return;
+      
+      loginBtn.textContent = 'Проверка...';
+      loginBtn.disabled = true;
+
+      try {
+        // Проверяем пароль, делая тестовый запрос на сервер
+        const response = await fetch(`${WORKER_URL}/api/applications`, {
+          headers: { 'Authorization': `Bearer ${password}` }
+        });
+
+        if (response.ok) {
+          currentPassword = password;
+          sessionStorage.setItem('adminPassword', password);
+          showAdminPanel();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+          setTimeout(() => document.getElementById('loginError').style.display = 'none', 3000);
+        }
+      } catch (e) {
+        alert("Ошибка сети: " + e.message);
+      } finally {
+        loginBtn.textContent = 'Войти';
+        loginBtn.disabled = false;
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminPassword');
+      currentPassword = '';
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('passwordInput').value = '';
+    }
+
+    function showAdminPanel() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadApplications();
+    }
+
+    async function loadApplications() {
+      const content = document.getElementById('content');
+      content.innerHTML = '<div class="loading">Загрузка заявок...</div>';
+
+      try {
+        const response = await fetch(`${WORKER_URL}/api/applications`, {
+          headers: { 'Authorization': `Bearer ${currentPassword}` }
+        });
+        
+        if (!response.ok) throw new Error('Ошибка авторизации');
+
+        currentApps = await response.json();
+        document.getElementById('statsText').textContent = `Всего заявок: ${currentApps.length}`;
+
+        if (currentApps.length === 0) {
+          content.innerHTML = `<div class="empty-state"><h2>Пока нет заявок</h2><p>Новые заявки появятся здесь автоматически</p></div>`;
+          return;
+        }
+
+        // Используем данные напрямую, так как воркер теперь сохраняет структурированный JSON
+        const parsedApplications = currentApps.map(app => {
+          const raw = app.raw_data || {};
+          return {
+            id: app.id,
+            name: raw.name || 'Не указано',
+            phone: raw.phone || 'Не указано',
+            date: raw.date || 'Не указано',
+            time: raw.time || 'Не указано',
+            guests: raw.guests || 'Не указано',
+            status: app.status || 'new',
+            timestamp: app.received_at || app.timestamp
+          };
+        });
+
+        renderTable(parsedApplications);
+      } catch (error) {
+        content.innerHTML = `<div class="empty-state"><h2>Ошибка загрузки</h2><p>${error.message}</p></div>`;
+      }
+    }
+
+    function renderTable(applications) {
+      const content = document.getElementById('content');
+      let rows = '';
+      
+      applications.forEach(app => {
+        rows += `
+          <tr>
+            <td class="date">${formatDate(app.timestamp)}</td>
+            <td class="name">${app.name}</td>
+            <td class="phone">${app.phone}</td>
+            <td>${app.date}</td>
+            <td>${app.time}</td>
+            <td>${app.guests}</td>
+            <td>
+              <select class="status-select status-${app.status}" onchange="updateStatus('${app.id}', this.value, this)">
+                <option value="new" ${app.status === 'new' ? 'selected' : ''}>Новая</option>
+                <option value="progress" ${app.status === 'progress' ? 'selected' : ''}>В работе</option>
+                <option value="done" ${app.status === 'done' ? 'selected' : ''}>Обработано</option>
+              </select>
+            </td>
+            <td><button class="delete-btn" onclick="deleteApplication('${app.id}')">Удалить</button></td>
+          </tr>
+        `;
+      });
+
+      content.innerHTML = `
+        <table class="applications-table">
+          <thead>
+            <tr>
+              <th>Дата</th><th>Имя</th><th>Телефон</th><th>Дата брони</th><th>Время</th><th>Гостей</th><th>Статус</th><th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function updateStatus(id, newStatus, selectElement) {
+      try {
+        const response = await fetch(`${WORKER_URL}/api/applications/${id}`, {
+          method: 'PATCH',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentPassword}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        if (response.ok) {
+          selectElement.className = `status-select status-${newStatus}`;
+          const app = currentApps.find(a => a.id === id);
+          if (app) app.status = newStatus;
+        } else {
+          alert('Ошибка обновления статуса');
+          loadApplications();
+        }
+      } catch (error) {
+        alert('Ошибка: ' + error.message);
+      }
+    }
+
+    async function deleteApplication(id) {
+      if (!confirm('Удалить эту заявку?')) return;
+      try {
+        const response = await fetch(`${WORKER_URL}/api/applications/${id}`, { 
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${currentPassword}` }
+        });
+        if (response.ok) loadApplications();
+        else alert('Ошибка при удалении');
+      } catch (error) { alert('Ошибка: ' + error.message); }
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function exportCSV() {
+      if (currentApps.length === 0) { alert('Нет заявок для экспорта'); return; }
+
+      const headers = ["Дата создания", "Имя", "Телефон", "Дата брони", "Время", "Гостей", "Статус"];
+      const statusMap = { 'new': 'Новая', 'progress': 'В работе', 'done': 'Обработано' };
+
+      const rows = currentApps.map(app => {
+        const raw = app.raw_data || {};
+        return [
+          formatDate(app.received_at || app.timestamp),
+          raw.name || '',
+          raw.phone || '',
+          raw.date || '',
+          raw.time || '',
+          raw.guests || '',
+          statusMap[app.status] || app.status
+        ];
+      });
+
+      const csvContent = [headers, ...rows]
+        .map(e => e.map(c => `"${String(c).replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+      
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `zayavki_ombre_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click();
+    }
+
+    document.getElementById('passwordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
+  </script>
+</body>
+</html>
