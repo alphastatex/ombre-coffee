@@ -454,7 +454,8 @@ window.addEventListener('resize', () => {
   }, 250);
 });
 
-// === FORM ===
+
+// === FORM (ОБНОВЛЕННЫЙ БЕЗОПАСНЫЙ БЛОК) ===
 const form = document.getElementById('bookingForm');
 const nameInput = document.getElementById('name');
 const phoneInput = document.getElementById('phone');
@@ -497,8 +498,6 @@ form.addEventListener('submit', async (e) => {
   
   if (!valid) return;
   
-  const messageText = `☕ НОВАЯ ЗАЯВКА — КОФЕЙНЯ ОМБРЕ\n👤 Имя: ${name}\n📞 Телефон: +${phone}\n Дата: ${date}\n🕒 Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment || '—'}\n📍 ${new Date().toLocaleString('ru-RU')}`.trim();
-  
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   
@@ -512,7 +511,15 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ text: messageText }),
+      body: JSON.stringify({
+        name: name,
+        phone: `+${phone}`,
+        date: date,
+        time: time,
+        guests: guests,
+        comment: comment,
+        initData: window.Telegram?.WebApp?.initData || ""
+      }),
       signal: controller.signal,
     });
     
@@ -525,11 +532,12 @@ form.addEventListener('submit', async (e) => {
         window.Telegram.WebApp.MainButton.hide();
       }
     } else {
-      alert('Ошибка при отправке. Позвоните нам: +7 (495) 123-45-67');
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Ошибка сервера');
     }
   } catch (error) {
     console.error('Ошибка отправки:', error);
-    alert('Ошибка сети. Позвоните нам: +7 (495) 123-45-67');
+    alert(`Ошибка: ${error.message}. Позвоните нам: +7 (495) 123-45-67`);
   } finally {
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
