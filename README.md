@@ -4,6 +4,7 @@
 
 **Live Demo:** https://alphastatex.github.io/ombre-coffee/  
 **Админ-панель:** https://alphastatex.github.io/ombre-coffee/admin.html
+[![CI Tests](https://github.com/alphastatex/ombre-coffee/actions/workflows/ci.yml/badge.svg)](https://github.com/alphastatex/ombre-coffee/actions/workflows/ci.yml)
 
 ---
 
