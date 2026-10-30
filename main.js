@@ -1,9 +1,12 @@
+// @ts-check
+
 // === ИМПОРТЫ (ВСЕГДА В НАЧАЛЕ ФАЙЛА) ===
 import { formatPhone } from './utils.js';
 
 // === ОПРЕДЕЛЕНИЕ TELEGRAM MINI APP ===
 function isTelegramMiniApp() {
-  return !!(window.Telegram?.WebApp || 
+  const win = /** @type {any} */ (window);
+  return !!(win.Telegram?.WebApp || 
             navigator.userAgent.includes('Telegram') ||
             window.location.hash.includes('tgWebAppData'));
 }
@@ -31,13 +34,14 @@ setTimeout(removePreloader, 2500);
 // === TELEGRAM MINI APP ===
 if (IS_TG_APP) {
   document.body.classList.add('telegram-mini-app');
+  const win = /** @type {any} */ (window);
   
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
+  if (win.Telegram && win.Telegram.WebApp) {
+    const tg = win.Telegram.WebApp;
     tg.ready();
     tg.expand();
     
-    const nameInput = document.getElementById('name');
+    const nameInput = /** @type {HTMLInputElement | null} */ (document.getElementById('name'));
     if (tg.initDataUnsafe?.user?.first_name && nameInput) {
       nameInput.value = tg.initDataUnsafe.user.first_name;
       nameInput.readOnly = true;
@@ -48,7 +52,7 @@ if (IS_TG_APP) {
     tg.MainButton.setColor('#8b6f47');
     tg.MainButton.hide();
     tg.MainButton.onClick(() => {
-      const submitBtn = document.querySelector('#bookingForm button[type="submit"]');
+      const submitBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('#bookingForm button[type="submit"]'));
       if (submitBtn) submitBtn.click();
     });
   }
@@ -56,7 +60,7 @@ if (IS_TG_APP) {
 
 // === BLUR-UP ===
 function initHeroBlurUp() {
-  const heroImages = document.querySelectorAll('.hero-image-main, .hero-image-accent');
+  const heroImages = /** @type {NodeListOf<HTMLImageElement>} */ (document.querySelectorAll('.hero-image-main, .hero-image-accent'));
   heroImages.forEach((img, index) => {
     const showImage = () => {
       setTimeout(() => img.classList.add('is-loaded'), 200 + (index * 200));
@@ -72,8 +76,8 @@ function initHeroBlurUp() {
 
 // === CURSOR (только если НЕ Mini App) ===
 if (!IS_TG_APP) {
-  const cursorDot = document.querySelector('.cursor-dot');
-  const cursorRing = document.querySelector('.cursor-ring');
+  const cursorDot = /** @type {HTMLElement | null} */ (document.querySelector('.cursor-dot'));
+  const cursorRing = /** @type {HTMLElement | null} */ (document.querySelector('.cursor-ring'));
   let mouseX = 0, mouseY = 0;
   let ringX = 0, ringY = 0;
   let cursorHidden = false;
@@ -99,7 +103,7 @@ if (!IS_TG_APP) {
   }
   animateRing();
   
-  const hoverTargets = document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card, input, select, textarea');
+  const hoverTargets = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card, input, select, textarea'));
   hoverTargets.forEach((el) => {
     el.addEventListener('mouseenter', () => {
       if (cursorDot) cursorDot.classList.add('is-hover');
@@ -111,7 +115,8 @@ if (!IS_TG_APP) {
     });
   });
   
-  document.querySelectorAll('.gallery-item').forEach((el) => {
+  const galleryItems = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.gallery-item'));
+  galleryItems.forEach((el) => {
     el.addEventListener('mouseenter', () => {
       if (cursorDot) cursorDot.classList.add('is-hover');
       if (cursorRing) {
@@ -125,7 +130,7 @@ if (!IS_TG_APP) {
     });
   });
   
-  const formElements = document.querySelectorAll('select, input[type="date"], input[type="time"]');
+  const formElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('select, input[type="date"], input[type="time"]'));
   formElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursorHidden = true;
@@ -142,7 +147,8 @@ if (!IS_TG_APP) {
   });
   
   document.addEventListener('mousemove', (e) => {
-    const isOverForm = e.target.closest('select, input[type="date"], input[type="time"]');
+    const target = /** @type {HTMLElement} */ (e.target);
+    const isOverForm = target.closest('select, input[type="date"], input[type="time"]');
     if (!isOverForm && cursorHidden) {
       cursorHidden = false;
       document.body.classList.remove('cursor-hidden');
@@ -157,12 +163,13 @@ window.addEventListener('load', () => {
 });
 
 // === MAGNETIC ===
-const magneticButtons = document.querySelectorAll('[data-magnetic]');
+const magneticButtons = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('[data-magnetic]'));
 magneticButtons.forEach((btn) => {
   btn.addEventListener('mousemove', (e) => {
+    const mouseEvent = /** @type {MouseEvent} */ (e);
     const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
+    const x = mouseEvent.clientX - rect.left - rect.width / 2;
+    const y = mouseEvent.clientY - rect.top - rect.height / 2;
     btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
   });
   btn.addEventListener('mouseleave', () => {
@@ -171,7 +178,7 @@ magneticButtons.forEach((btn) => {
 });
 
 // === SCROLL PROGRESS ===
-const scrollProgress = document.querySelector('.scroll-progress');
+const scrollProgress = /** @type {HTMLElement | null} */ (document.querySelector('.scroll-progress'));
 window.addEventListener('scroll', () => {
   const scrolled = window.scrollY;
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -204,21 +211,22 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
-document.querySelectorAll('.reveal, .about-image, .section-label').forEach((el) => {
+const revealElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.reveal, .about-image, .section-label'));
+revealElements.forEach((el) => {
   revealObserver.observe(el);
 });
 
-const galleryReveals = document.querySelectorAll('.gallery-item.reveal');
+const galleryReveals = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.gallery-item.reveal'));
 galleryReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
 
-const menuReveals = document.querySelectorAll('.menu-category.reveal');
+const menuReveals = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.menu-category.reveal'));
 menuReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.15}s`; });
 
-const statReveals = document.querySelectorAll('.stat-item.reveal');
+const statReveals = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.stat-item.reveal'));
 statReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
 
 // === PARALLAX ===
-const parallaxElements = document.querySelectorAll('[data-parallax]');
+const parallaxElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('[data-parallax]'));
 let parallaxTicking = false;
 const baseScrollY = window.scrollY;
 
@@ -242,11 +250,12 @@ window.addEventListener('scroll', () => {
 const counterObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      const el = entry.target;
+      const el = /** @type {HTMLElement} */ (entry.target);
       const target = parseInt(el.dataset.counter || '0', 10);
       const duration = 2000;
       const start = performance.now();
       
+      /** @param {number} currentTime */
       const updateCounter = (currentTime) => {
         const elapsed = currentTime - start;
         const progress = Math.min(elapsed / duration, 1);
@@ -266,7 +275,7 @@ document.querySelectorAll('[data-counter]').forEach((el) => { counterObserver.ob
 
 // === LIGHTBOX ===
 const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightboxImg');
+const lightboxImg = /** @type {HTMLImageElement} */ (document.getElementById('lightboxImg'));
 const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
@@ -279,36 +288,36 @@ document.querySelectorAll('[data-lightbox]').forEach((item) => {
     currentLightboxIndex = parseInt(item.getAttribute('data-lightbox') || '0', 10);
     lightboxImg.src = lightboxImages[currentLightboxIndex];
     lightboxImg.alt = lightboxCaptions[currentLightboxIndex];
-    lightbox.classList.add('is-active');
+    lightbox?.classList.add('is-active');
     document.body.style.overflow = 'hidden';
   });
 });
 
-lightboxClose.addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+lightboxClose?.addEventListener('click', closeLightbox);
+lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
 function closeLightbox() {
-  lightbox.classList.remove('is-active');
+  lightbox?.classList.remove('is-active');
   document.body.style.overflow = '';
 }
 
-lightboxPrev.addEventListener('click', (e) => {
+lightboxPrev?.addEventListener('click', (e) => {
   e.stopPropagation();
   currentLightboxIndex = (currentLightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
   lightboxImg.src = lightboxImages[currentLightboxIndex];
 });
 
-lightboxNext.addEventListener('click', (e) => {
+lightboxNext?.addEventListener('click', (e) => {
   e.stopPropagation();
   currentLightboxIndex = (currentLightboxIndex + 1) % lightboxImages.length;
   lightboxImg.src = lightboxImages[currentLightboxIndex];
 });
 
 document.addEventListener('keydown', (e) => {
-  if (!lightbox.classList.contains('is-active')) return;
+  if (!lightbox?.classList.contains('is-active')) return;
   if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') lightboxPrev.click();
-  if (e.key === 'ArrowRight') lightboxNext.click();
+  if (e.key === 'ArrowLeft') /** @type {HTMLButtonElement} */ (lightboxPrev).click();
+  if (e.key === 'ArrowRight') /** @type {HTMLButtonElement} */ (lightboxNext).click();
 });
 
 // === REVIEWS CAROUSEL ===
@@ -335,6 +344,7 @@ const container = document.getElementById('carouselContainer');
 
 let currentIndex = 0;
 let slidesPerView = IS_TG_APP ? 1 : (window.innerWidth <= 968 ? 1 : window.innerWidth <= 1200 ? 2 : 3);
+/** @type {number | undefined} */
 let autoPlayInterval;
 
 function getSlidesPerView() {
@@ -345,6 +355,7 @@ function getSlidesPerView() {
 }
 
 function renderReviews() {
+  if (!track) return;
   track.innerHTML = reviews.map(r => `
     <div class="review-card">
       <div class="review-header">
@@ -361,6 +372,7 @@ function renderReviews() {
 }
 
 function updateDots() {
+  if (!dotsContainer) return;
   const totalSlides = Math.ceil(reviews.length / slidesPerView);
   dotsContainer.innerHTML = Array.from({ length: totalSlides }, (_, i) =>
     `<div class="dot ${i === currentIndex ? 'active' : ''}" data-index="${i}" role="tab" aria-label="Слайд ${i + 1}"></div>`
@@ -368,11 +380,12 @@ function updateDots() {
 }
 
 function updateCarousel() {
-    const firstCard = track.children[0];
+    if (!track) return;
+    const firstCard = /** @type {HTMLElement} */ (track.children[0]);
     if (!firstCard) return;
     const style = window.getComputedStyle(firstCard);
     const marginRight = parseFloat(style.marginRight) || 0;
-    const cardWidth = firstCard.offsetWidth + marginRight;
+    const cardWidth = firstCard.clientWidth + marginRight;
     track.style.transform = `translateX(-${currentIndex * slidesPerView * cardWidth}px)`;
     updateDots();
 }
@@ -413,12 +426,12 @@ if (IS_TG_APP) {
 }
 
 // Кнопки
-nextBtn.addEventListener('click', () => { nextSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } });
-prevBtn.addEventListener('click', () => { prevSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } });
+nextBtn?.addEventListener('click', () => { nextSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } });
+prevBtn?.addEventListener('click', () => { prevSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } });
 
 // Точки
-dotsContainer.addEventListener('click', (e) => {
-  const target = e.target;
+dotsContainer?.addEventListener('click', (e) => {
+  const target = /** @type {HTMLElement} */ (e.target);
   if (target.classList.contains('dot')) {
     currentIndex = parseInt(target.dataset.index || '0', 10);
     updateCarousel();
@@ -427,23 +440,24 @@ dotsContainer.addEventListener('click', (e) => {
 });
 
 // Пауза при наведении (только не в Mini App)
-if (!IS_TG_APP) {
+if (!IS_TG_APP && container) {
   container.addEventListener('mouseenter', stopAutoPlay);
   container.addEventListener('mouseleave', startAutoPlay);
 }
 
 // Клавиатура
-container.setAttribute('tabindex', '0');
-container.addEventListener('keydown', (e) => {
+container?.setAttribute('tabindex', '0');
+container?.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') { prevSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } }
   if (e.key === 'ArrowRight') { nextSlide(); if (!IS_TG_APP) { stopAutoPlay(); startAutoPlay(); } }
 });
 
 // Resize
+/** @type {number | undefined} */
 let resizeTimer;
 window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(() => {
     const newSlidesPerView = getSlidesPerView();
     if (newSlidesPerView !== slidesPerView) {
       slidesPerView = newSlidesPerView;
@@ -456,13 +470,13 @@ window.addEventListener('resize', () => {
 
 
 // === FORM (ОБНОВЛЕННЫЙ БЕЗОПАСНЫЙ БЛОК) ===
-const form = document.getElementById('bookingForm');
-const nameInput = document.getElementById('name');
-const phoneInput = document.getElementById('phone');
-const dateInput = document.getElementById('date');
-const timeSelect = document.getElementById('time');
-const guestsSelect = document.getElementById('guests');
-const commentInput = document.getElementById('comment');
+const form = /** @type {HTMLFormElement} */ (document.getElementById('bookingForm'));
+const nameInput = /** @type {HTMLInputElement} */ (document.getElementById('name'));
+const phoneInput = /** @type {HTMLInputElement} */ (document.getElementById('phone'));
+const dateInput = /** @type {HTMLInputElement} */ (document.getElementById('date'));
+const timeSelect = /** @type {HTMLSelectElement} */ (document.getElementById('time'));
+const guestsSelect = /** @type {HTMLSelectElement} */ (document.getElementById('guests'));
+const commentInput = /** @type {HTMLTextAreaElement} */ (document.getElementById('comment'));
 const PROXY_URL = 'https://tg-ombre-proxy.alphastatex.workers.dev';
 
 phoneInput.addEventListener('input', () => {
@@ -471,6 +485,10 @@ phoneInput.addEventListener('input', () => {
 
 dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
 
+/** 
+ * @param {string} id 
+ * @param {boolean} show 
+ */
 function showError(id, show) {
   const message = document.getElementById(id);
   const input = document.getElementById(id.replace('Error', ''));
@@ -497,8 +515,18 @@ form.addEventListener('submit', async (e) => {
   if (!guests) { showError('guestsError', true); valid = false; } else showError('guestsError', false);
   
   if (!valid) return;
+
+  // Получаем токен от Cloudflare Turnstile
+  const turnstileResponse = /** @type {HTMLInputElement | null} */ (document.querySelector('[name="cf-turnstile-response"]'));
+  const turnstileToken = turnstileResponse ? turnstileResponse.value : "";
+
+  if (!turnstileToken) {
+    alert("Пожалуйста, подтвердите, что вы не робот (поставьте галочку).");
+    return;
+  }
   
-  const submitBtn = form.querySelector('button[type="submit"]');
+  const submitBtn = /** @type {HTMLButtonElement | null} */ (form.querySelector('button[type="submit"]'));
+  if (!submitBtn) return;
   const originalText = submitBtn.textContent;
   
   try {
@@ -508,6 +536,7 @@ form.addEventListener('submit', async (e) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
     
+    const win = /** @type {any} */ (window);
     const res = await fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -518,7 +547,8 @@ form.addEventListener('submit', async (e) => {
         time: time,
         guests: guests,
         comment: comment,
-        initData: window.Telegram?.WebApp?.initData || ""
+        turnstileToken: turnstileToken, // <--- ОТПРАВЛЯЕМ ТОКЕН НА БЭКЕНД
+        initData: win.Telegram?.WebApp?.initData || ""
       }),
       signal: controller.signal,
     });
@@ -526,10 +556,14 @@ form.addEventListener('submit', async (e) => {
     clearTimeout(timeoutId);
     
     if (res.ok) {
-      document.getElementById('successModal').classList.add('show');
+      document.getElementById('successModal')?.classList.add('show');
       form.reset();
-      if (IS_TG_APP && window.Telegram?.WebApp?.MainButton) {
-        window.Telegram.WebApp.MainButton.hide();
+      
+      // Сбрасываем капчу для следующей заявки
+      if (win.turnstile) win.turnstile.reset();
+
+      if (IS_TG_APP && win.Telegram?.WebApp?.MainButton) {
+        win.Telegram.WebApp.MainButton.hide();
       }
     } else {
       const errData = await res.json().catch(() => ({}));
@@ -537,7 +571,8 @@ form.addEventListener('submit', async (e) => {
     }
   } catch (error) {
     console.error('Ошибка отправки:', error);
-    alert(`Ошибка: ${error.message}. Позвоните нам: +7 (495) 123-45-67`);
+    const err = /** @type {Error} */ (error);
+    alert(`Ошибка: ${err.message}. Позвоните нам: +7 (495) 123-45-67`);
   } finally {
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
@@ -566,7 +601,8 @@ document.addEventListener('keydown', (e) => {
 
 // === REDUCE MOTION ===
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.reveal, .about-image').forEach((el) => {
+  const reduceElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.reveal, .about-image'));
+  reduceElements.forEach((el) => {
     el.classList.add('is-visible');
     el.style.transition = 'none';
   });

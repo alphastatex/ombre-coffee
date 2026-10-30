@@ -15,6 +15,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Cloudflare Turnstile API -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="is-loading">
   <!-- Grain -->
@@ -394,6 +397,10 @@
         <textarea id="comment" rows="3" placeholder=" "></textarea>
         <label for="comment">Комментарий</label>
       </div>
+
+      <!-- CLOUDFLARE TURNSTILE WIDGET -->
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAFtOXlUA8TQNmkS6" data-theme="light" style="margin: 0 auto 20px;"></div>
+
       <button type="submit" class="btn btn-primary">Отправить заявку</button>
     </form>
   </section>
@@ -493,6 +500,6 @@
     </div>
   </div>
   
-  <script type="module" src="main.js"></script>
+  <script type="module" src="main.js?v=2"></script>
 </body>
 </html>

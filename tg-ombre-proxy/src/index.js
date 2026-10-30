@@ -1,5 +1,5 @@
 export default {
-  // Добавили ctx (третий аргумент) для функции waitUntil
+  // ctx (третий аргумент) для функции waitUntil
   async fetch(request, env, ctx) {
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -97,6 +97,34 @@ export default {
       // ==========================================
       if (path === '/' && method === 'POST') {
         const data = await request.json();
+        
+        // === ПРОВЕРКА CLOUDFLARE TURNSTILE ===
+        const turnstileToken = data.turnstileToken;
+        
+        if (!turnstileToken) {
+          return new Response(JSON.stringify({ error: 'Отсутствует токен капчи. Вы робот?' }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        }
+
+        const turnstileFormData = new FormData();
+        turnstileFormData.append('secret', env.TURNSTILE_SECRET);
+        turnstileFormData.append('response', turnstileToken);
+        // Передаем IP пользователя для доп. проверки (Cloudflare автоматически подставляет CF-Connecting-IP)
+        const ip = request.headers.get('CF-Connecting-IP');
+        if (ip) turnstileFormData.append('remoteip', ip);
+
+        const turnstileResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+          method: 'POST',
+          body: turnstileFormData,
+        });
+
+        const turnstileOutcome = await turnstileResponse.json();
+
+        if (!turnstileOutcome.success) {
+          console.error("Turnstile validation failed:", turnstileOutcome['error-codes']);
+          return new Response(JSON.stringify({ error: 'Не пройдена проверка на робота' }), { status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        }
+        // =====================================
+
         let username = "🌐 Из браузера (без Telegram)";
 
         // Валидация Telegram initData
@@ -146,7 +174,6 @@ export default {
         }
 
         // ОТПРАВЛЯЕМ В TELEGRAM АСИНХРОННО (в фоне)
-        // Благодаря этому форма ответит моментально, и таймаут не сработает
         ctx.waitUntil((async () => {
           try {
             const tgRes = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
