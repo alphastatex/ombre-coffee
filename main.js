@@ -83,18 +83,21 @@ if (!IS_TG_APP) {
   let cursorHidden = false;
   
   document.addEventListener('mousemove', (e) => {
-    if (cursorHidden) return;
+    // Всегда обновляем координаты, даже если курсор скрыт. 
+    // Это убирает эффект "прыжка" при уходе с поля ввода.
     mouseX = e.clientX;
     mouseY = e.clientY;
-    if (cursorDot) {
+    
+    if (!cursorHidden && cursorDot) {
       cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
     }
   });
   
   function animateRing() {
     if (!cursorHidden) {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
+      // Увеличили скорость с 0.15 до 0.25 (как в барбершопе)
+      ringX += (mouseX - ringX) * 0.25;
+      ringY += (mouseY - ringY) * 0.25;
       if (cursorRing) {
         cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
       }
@@ -103,7 +106,8 @@ if (!IS_TG_APP) {
   }
   animateRing();
   
-  const hoverTargets = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card, input, select, textarea'));
+  // Убрали input, select, textarea из hover-таргетов, чтобы не было конфликтов со скрытием
+  const hoverTargets = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card'));
   hoverTargets.forEach((el) => {
     el.addEventListener('mouseenter', () => {
       if (cursorDot) cursorDot.classList.add('is-hover');
@@ -130,29 +134,25 @@ if (!IS_TG_APP) {
     });
   });
   
-  const formElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('select, input[type="date"], input[type="time"]'));
+  // Скрываем кастомный курсор над ВСЕМИ полями ввода (input, select, textarea)
+  const formElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('select, input, textarea'));
+  
   formElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursorHidden = true;
       document.body.classList.add('cursor-hidden');
     });
     el.addEventListener('mouseleave', () => {
-      cursorHidden = false;
-      document.body.classList.remove('cursor-hidden');
+      // Не показываем курсор, если пользователь кликнул в поле (фокус остался в поле)
+      if (document.activeElement !== el) {
+        cursorHidden = false;
+        document.body.classList.remove('cursor-hidden');
+      }
     });
     el.addEventListener('blur', () => {
       cursorHidden = false;
       document.body.classList.remove('cursor-hidden');
     });
-  });
-  
-  document.addEventListener('mousemove', (e) => {
-    const target = /** @type {HTMLElement} */ (e.target);
-    const isOverForm = target.closest('select, input[type="date"], input[type="time"]');
-    if (!isOverForm && cursorHidden) {
-      cursorHidden = false;
-      document.body.classList.remove('cursor-hidden');
-    }
   });
 }
 
