@@ -28,6 +28,25 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   cursor: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Разрешаем выделять только контент */
+p, .menu-item-desc, .review-text, .quote {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Принудительно прячем курсор на всех интерактивных элементах */
+a, button, .dot, .social-link, .footer-col a, .footer-brand a, .menu-item, .gallery-item {
+  cursor: none !important;
+}
+
+@media (hover: none) {
+  a, button, .dot, .social-link, .footer-col a, .footer-brand a, .menu-item, .gallery-item {
+    cursor: pointer !important; /* На мобилках возвращаем палец */
+  }
 }
 
 body.is-loading { overflow: hidden; }
@@ -245,7 +264,39 @@ nav.is-scrolled {
   border-bottom-color: var(--border-light);
   padding: 16px 60px;
 }
+/* === BURGER MENU BUTTON === */
+.nav-burger {
+  display: none;
+  background: none;
+  border: none;
+  width: 30px;
+  height: 20px;
+  position: relative;
+  cursor: none;
+  z-index: 1001;
+}
 
+.nav-burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent-dark);
+  transition: all 0.4s var(--ease);
+}
+
+.nav-burger span:nth-child(1) { top: 4px; }
+.nav-burger span:nth-child(2) { top: 14px; }
+
+.nav-burger.is-active span:nth-child(1) {
+  top: 9px;
+  transform: rotate(45deg);
+}
+
+.nav-burger.is-active span:nth-child(2) {
+  top: 9px;
+  transform: rotate(-45deg);
+}
 .logo {
   font-family: "Playfair Display", serif;
   font-size: 22px;
@@ -253,16 +304,28 @@ nav.is-scrolled {
   color: var(--accent-dark);
   text-decoration: none;
   font-weight: 500;
-  overflow: hidden;
-  display: inline-block;
+  overflow: visible;
+  display: flex;
+  align-items: center;
 }
 
 .logo span {
   display: inline-block;
   transform: translateY(100%);
   transition: transform 0.8s var(--ease);
+  display: flex;
+  align-items: baseline;
 }
 
+.logo-bean {
+  width: 0.80em; /* Уменьшили размер, чтобы соответствовало буквам */
+  height: 0.80em;
+  margin-right: 0.1em; /* Чуть увеличили отступ от буквы "М" */
+  margin-top: 0;
+  display: inline-block;
+  transform: translateY(1.5px); /* Оставляем легкую подстройку */
+  overflow: visible;
+}
 nav.is-loaded .logo span { transform: translateY(0); }
 
 .nav-links {
@@ -405,7 +468,55 @@ nav.is-loaded .logo span { transform: translateY(0); }
   font-style: italic;
   color: var(--accent);
 }
+.hero h1 .accent-word {
+  font-style: italic;
+  color: var(--accent);
+  padding-right: 4px;
+}
 
+/* Новый индикатор скролла */
+.scroll-indicator {
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.scroll-indicator:hover { opacity: 1; }
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: rgba(139, 111, 71, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: var(--accent);
+  animation: scrollLineAnim 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@keyframes scrollLineAnim {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.scroll-text {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
 .hero p {
   font-size: 16px;
   color: var(--text-muted);
@@ -431,13 +542,15 @@ nav.is-loaded .logo span { transform: translateY(0); }
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 400;
-  transition: all 0.4s var(--ease);
   display: inline-block;
-  border: none;
   font-family: inherit;
   position: relative;
   overflow: hidden;
   cursor: none;
+  
+  /* ФИКС: прозрачная рамка и четкий transition */
+  border: 1px solid transparent; 
+  transition: background 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.4s var(--ease);
 }
 
 .btn-primary {
@@ -519,6 +632,8 @@ nav.is-loaded .logo span { transform: translateY(0); }
 .hero-image {
   position: relative;
   height: 620px;
+  /* ФИКС: Сдвигаем картинки правее, чтобы сократить пустоту по центру */
+  transform: translateX(40px); 
 }
 
 .hero-image-wrapper,
@@ -533,17 +648,30 @@ nav.is-loaded .logo span { transform: translateY(0); }
   height: 100%;
 }
 
+.hero-image-wrapper,
+.hero-image-accent-wrapper {
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--border); /* ФИКС: пока картинка грузится, здесь будет красивый фон, а не белая дыра */
+}
+
 .hero-image-main,
 .hero-image-accent {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(20px) brightness(1.1);
-  opacity: 0;
-  transform: scale(1.08);
-  transition: filter 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              opacity 1.2s ease,
-              transform 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Сильный блюр для старта, без зума */
+  filter: blur(20px); 
+  opacity: 0.3; /* Начинаем с 0.3, чтобы сразу были видны очертания */
+  /* Долгий, плавный переход */
+  transition: filter 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease;
+  will-change: filter, opacity;
+}
+
+.hero-image-main.is-loaded,
+.hero-image-accent.is-loaded {
+  filter: blur(0);
+  opacity: 1;
 }
 
 .hero-image-main.is-loaded,
@@ -557,11 +685,13 @@ nav.is-loaded .logo span { transform: translateY(0); }
 
 .hero-image-accent-wrapper {
   position: absolute;
-  bottom: -40px;
-  left: -40px;
+  /* ФИКС: Опускаем ниже и сдвигаем левее (ближе к тексту) */
+  bottom: -60px;
+  left: -80px;
   width: 220px;
   height: 280px;
   box-shadow: 0 30px 60px rgba(61, 46, 31, 0.25);
+  z-index: 2; /* Чтобы чашка была поверх большой картинки */
 }
 
 section { padding: 120px 60px; }
@@ -748,7 +878,7 @@ section { padding: 120px 60px; }
 .promo {
   background: var(--accent-dark);
   color: var(--cream);
-  padding: 100px 60px;
+  padding: 70px 60px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -807,7 +937,7 @@ section { padding: 120px 60px; }
 .promo h2 {
   font-family: "Playfair Display", serif;
   font-size: clamp(32px, 4vw, 52px);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   font-weight: 400;
   line-height: 1.15;
 }
@@ -815,13 +945,14 @@ section { padding: 120px 60px; }
 .promo p {
   font-size: 16px;
   opacity: 0.85;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   line-height: 1.7;
 }
 
 .promo .btn {
   background: var(--cream);
   color: var(--accent-dark);
+  border: 1px solid var(--cream); /* Рамка есть сразу, поэтому ничего не прыгнет */
 }
 
 .promo .btn:hover {
@@ -830,43 +961,56 @@ section { padding: 120px 60px; }
   border: 1px solid var(--cream);
 }
 
-/* === MARQUEE === */
-.marquee {
+/* === COFFEE PARALLAX === */
+.coffee-parallax {
+  position: relative;
+  padding: 80px 20px;
   background: var(--accent-dark);
   color: var(--cream);
-  padding: 30px 0;
   overflow: hidden;
-  border-top: 1px solid rgba(250, 247, 242, 0.1);
-  border-bottom: 1px solid rgba(250, 247, 242, 0.1);
-}
-
-.marquee-track {
   display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 380px;
 }
 
-.marquee-item {
-  font-family: "Playfair Display", serif;
-  font-size: clamp(24px, 3vw, 40px);
-  font-style: italic;
-  white-space: nowrap;
-  padding: 0 40px;
-  opacity: 0.85;
+.parallax-bean {
+  position: absolute;
+  opacity: 0.25; /* Подняли прозрачность, чтобы зерна было видно */
+  pointer-events: none;
+  will-change: transform;
+}
+  .bean-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.marquee-item::after {
-  content: "•";
-  margin-left: 80px;
-  font-size: 20px;
-  opacity: 0.4;
+/* Индивидуальное позиционирование зерен */
+.bean-1 { 
+  width: 180px; 
+  top: 15%; 
+  left: 8%; 
 }
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.bean-2 { 
+  width: 140px; 
+  bottom: 10%; 
+  right: 25%; /* Сдвинули левее, чтобы не наезжало на правое зерно */
+  opacity: 0.05; 
 }
-
+.bean-3 { 
+  width: 280px; 
+  top: -5%; /* Подняли выше */
+  right: -8%; /* Сдвинули чуть за край экрана (это выглядит стильно, как кадрирование) */
+  opacity: 0.04; 
+}
+.bean-4 { 
+  width: 90px; 
+  bottom: 25%; 
+  left: 22%; 
+  opacity: 0.1; 
+}
 /* === MENU === */
 .menu-grid {
   max-width: 1400px;
@@ -1669,14 +1813,49 @@ footer {
   
   nav { padding: 18px 24px; }
   nav.is-scrolled { padding: 14px 24px; }
-  .nav-links { display: none; }
+    .nav-burger { display: block; } /* Показываем бургер */
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex; /* Меняем display: none на flex для работы анимации */
+  }
+
+  .nav-links.is-active {
+    transform: translateX(0);
+  }
+
+  .nav-links a { font-size: 20px; }
   
+    .nav.is-loaded .logo span { 
+    transform: translateY(0); 
+  }
+
+
   section { padding: 80px 24px; }
   
   .hero { padding: 120px 24px 60px; }
   .hero-grid { grid-template-columns: 1fr; gap: 50px; }
-  .hero-image { height: 400px; }
+    .hero-image { 
+    height: 400px;
+    transform: none; 
+    }  
+  .hero-image-accent-wrapper {
+    bottom: -20px;
+    left: -10px;
   
+} 
   .about-grid { grid-template-columns: 1fr; gap: 50px; }
   .menu-grid { grid-template-columns: 1fr; gap: 40px; }
   .gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -1713,7 +1892,43 @@ footer {
     .review-text { font-size: 14px; line-height: 1.6; }
     .location-card { padding: 32px 24px; }
     .location-row { grid-template-columns: 1fr; gap: 32px; }
-}
+    .coffee-parallax {
+      padding: 80px 20px;
+      min-height: 320px;
+    }
+
+    .parallax-content h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .parallax-content p {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .bean-1 { 
+      width: 90px; 
+      top: 5%; 
+      left: -10%; 
+      opacity: 0.05; 
+    }
+    .bean-2 { 
+      width: 70px; 
+      bottom: 5%; 
+      right: -5%; 
+      opacity: 0.05; 
+    }
+    .bean-3 { 
+      width: 130px; 
+      top: -5%; 
+      right: -15%; 
+      opacity: 0.03; 
+    }
+    .bean-4 { 
+      display: none; 
+    }
+  }
 
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr; }

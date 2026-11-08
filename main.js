@@ -3,6 +3,33 @@
 // === ИМПОРТЫ (ВСЕГДА В НАЧАЛЕ ФАЙЛА) ===
 import { formatPhone } from './utils.js';
 
+// === МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ===
+const navBurger = document.querySelector('.nav-burger');
+const navMenu = document.querySelector('.nav-links');
+
+if (navBurger && navMenu) {
+  navBurger.addEventListener('click', () => {
+    const isOpen = navMenu.classList.contains('is-active');
+    
+    navMenu.classList.toggle('is-active');
+    navBurger.classList.toggle('is-active');
+    navBurger.setAttribute('aria-expanded', (!isOpen).toString());
+    
+    // Блокируем скролл body, пока меню открыто
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  });
+
+  // Закрываем меню при клике на любую ссылку внутри него
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('is-active');
+      navBurger.classList.remove('is-active');
+      navBurger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
 // === ОПРЕДЕЛЕНИЕ TELEGRAM MINI APP ===
 function isTelegramMiniApp() {
   const win = /** @type {any} */ (window);
@@ -83,8 +110,6 @@ if (!IS_TG_APP) {
   let cursorHidden = false;
   
   document.addEventListener('mousemove', (e) => {
-    // Всегда обновляем координаты, даже если курсор скрыт. 
-    // Это убирает эффект "прыжка" при уходе с поля ввода.
     mouseX = e.clientX;
     mouseY = e.clientY;
     
@@ -95,7 +120,6 @@ if (!IS_TG_APP) {
   
   function animateRing() {
     if (!cursorHidden) {
-      // Увеличили скорость с 0.15 до 0.25 (как в барбершопе)
       ringX += (mouseX - ringX) * 0.25;
       ringY += (mouseY - ringY) * 0.25;
       if (cursorRing) {
@@ -106,7 +130,6 @@ if (!IS_TG_APP) {
   }
   animateRing();
   
-  // Убрали input, select, textarea из hover-таргетов, чтобы не было конфликтов со скрытием
   const hoverTargets = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('a, button, .menu-item, .gallery-item, .review-card'));
   hoverTargets.forEach((el) => {
     el.addEventListener('mouseenter', () => {
@@ -134,7 +157,6 @@ if (!IS_TG_APP) {
     });
   });
   
-  // Скрываем кастомный курсор над ВСЕМИ полями ввода (input, select, textarea)
   const formElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('select, input, textarea'));
   
   formElements.forEach(el => {
@@ -143,7 +165,6 @@ if (!IS_TG_APP) {
       document.body.classList.add('cursor-hidden');
     });
     el.addEventListener('mouseleave', () => {
-      // Не показываем курсор, если пользователь кликнул в поле (фокус остался в поле)
       if (document.activeElement !== el) {
         cursorHidden = false;
         document.body.classList.remove('cursor-hidden');
@@ -157,9 +178,10 @@ if (!IS_TG_APP) {
 }
 
 // === PRELOADER ===
+initHeroBlurUp();
+
 window.addEventListener('load', () => {
   removePreloader();
-  initHeroBlurUp();
 });
 
 // === MAGNETIC ===
@@ -225,16 +247,19 @@ menuReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.15}s`; });
 const statReveals = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('.stat-item.reveal'));
 statReveals.forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
 
-// === PARALLAX ===
-const parallaxElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('[data-parallax]'));
+// === НОВЫЙ ПАРАЛЛАКС (ДЛЯ ЗЕРЕН) ===
+const parallaxElements = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('[data-speed]'));
 let parallaxTicking = false;
-const baseScrollY = window.scrollY;
 
 function updateParallax() {
-  const delta = window.scrollY - baseScrollY;
   parallaxElements.forEach((el) => {
-    const speed = parseFloat(el.dataset.parallax || '0');
-    el.style.transform = `translate3d(0, ${delta * speed}px, 0)`;
+    const speed = parseFloat(el.dataset.speed || '0');
+    const rect = el.getBoundingClientRect();
+    // Считаем смещение относительно центра экрана
+    const centerOffset = rect.top + rect.height / 2 - window.innerHeight / 2;
+    const yPos = centerOffset * speed;
+    
+    el.style.transform = `translate3d(0, ${yPos}px, 0)`;
   });
   parallaxTicking = false;
 }
@@ -245,6 +270,9 @@ window.addEventListener('scroll', () => {
     parallaxTicking = true;
   }
 }, { passive: true });
+
+// Инициализация позиций при загрузке
+updateParallax();
 
 // === COUNTER ===
 const counterObserver = new IntersectionObserver((entries) => {
@@ -547,7 +575,7 @@ form.addEventListener('submit', async (e) => {
         time: time,
         guests: guests,
         comment: comment,
-        turnstileToken: turnstileToken, // <--- ОТПРАВЛЯЕМ ТОКЕН НА БЭКЕНД
+        turnstileToken: turnstileToken,
         initData: win.Telegram?.WebApp?.initData || ""
       }),
       signal: controller.signal,

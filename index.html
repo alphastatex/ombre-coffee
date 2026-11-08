@@ -6,7 +6,7 @@
   <meta name="description" content="Кофейня Омбре — уютное место в Хорошево-Мневниках. Свежий кофе, домашняя выпечка, завтраки.">
   <title>Кофейня Омбре — Уютное место в Хорошево-Мневниках | Кофе, десерты, завтраки</title>
   
-  <!-- ФАВИКОН: нарисованная чашка кофе в SVG -->
+  <!-- ФАВИКОН -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M8 20h36v4c0 14-7 22-18 22S8 38 8 24v-4z' fill='%233d2e1f'/%3E%3Cpath d='M44 24h4c4 0 6 2 6 6s-2 6-6 6h-2' fill='none' stroke='%233d2e1f' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M18 10c0-2 2-4 4-4s4 2 4 4M28 10c0-2 2-4 4-4s4 2 4 4M38 10c0-2 2-4 4-4s4 2 4 4' fill='none' stroke='%233d2e1f' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
   
   <!-- Fonts -->
@@ -40,7 +40,14 @@
   
   <!-- Navigation -->
   <nav>
-    <a href="index.html" class="logo"><span>ОМБРЕ.</span></a>
+        <a href="index.html" class="logo">
+      <span>
+        <svg class="logo-bean" viewBox="0 0 50 50" aria-hidden="true">
+          <path d="M25,2 C11,2 5,15 5,25 C5,35 11,48 25,48 C39,48 45,35 45,25 C45,15 39,2 25,2 Z" fill="currentColor"/>
+          <path d="M25,4 C10,15 40,35 25,46 C30,35 20,15 25,4 Z" fill="var(--accent)"/>
+        </svg>МБРЕ.
+      </span>
+    </a>
     <ul class="nav-links">
       <li><a href="#about" data-text="О нас"><span class="link-text">О нас</span></a></li>
       <li><a href="#menu" data-text="Меню"><span class="link-text">Меню</span></a></li>
@@ -49,6 +56,12 @@
       <li><a href="#location" data-text="Контакты"><span class="link-text">Контакты</span></a></li>
       <li><a href="#booking" class="nav-cta" data-text="Забронировать"><span class="link-text">Забронировать</span></a></li>
     </ul>
+    
+    <!-- Кнопка мобильного меню -->
+    <button class="nav-burger" aria-label="Открыть меню" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
   </nav>
   
   <!-- Hero -->
@@ -60,12 +73,17 @@
           <span class="word"><span class="word-inner">Место,</span></span>
           <span class="word"><span class="word-inner">где</span></span>
           <span class="word"><span class="word-inner">хочется</span></span>
-          <span class="word"><span class="word-inner">остановиться.</span></span>
+          <span class="word"><span class="word-inner accent-word">остановиться.</span></span>
         </h1>
         <p>Вкусный кофе от опытных бариста, свежие десерты из собственной пекарни и уютная атмосфера. Просто приходите — мы позаботимся об остальном.</p>
         <div class="hero-buttons">
           <a href="#booking" class="btn btn-primary">Забронировать столик</a>
           <a href="#menu" class="btn btn-outline">Посмотреть меню</a>
+        </div>
+        
+        <div class="scroll-indicator">
+          <span class="scroll-line"></span>
+          <span class="scroll-text">Листайте вниз</span>
         </div>
       </div>
       <div class="hero-image">
@@ -138,19 +156,46 @@
     </div>
   </section>
   
-  <!-- Marquee -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span class="marquee-item">Свежая выпечка каждый день</span>
-      <span class="marquee-item">Авторский кофе</span>
-      <span class="marquee-item">Уютная атмосфера</span>
-      <span class="marquee-item">Собственная пекарня</span>
-      <span class="marquee-item">Свежая выпечка каждый день</span>
-      <span class="marquee-item">Авторский кофе</span>
-      <span class="marquee-item">Уютная атмосфера</span>
-      <span class="marquee-item">Собственная пекарня</span>
+  <!-- COFFEE PARALLAX (ЗАМЕНА МАРКИ) -->
+  <section class="coffee-parallax">
+                <!-- Зерна на фоне (Видимые и стильные) -->
+    <div class="parallax-bean bean-1" data-speed="0.15">
+      <svg viewBox="0 0 100 100" class="bean-svg">
+        <defs>
+          <radialGradient id="goldBean" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#c4a57b" />
+            <stop offset="60%" stop-color="#8b6f47" />
+            <stop offset="100%" stop-color="#3d2e1f" />
+          </radialGradient>
+        </defs>
+        <path d="M50,5 C20,5 10,30 10,50 C10,70 20,95 50,95 C80,95 90,70 90,50 C90,30 80,5 50,5 Z" fill="url(#goldBean)" />
+        <path d="M50,8 C20,25 80,75 50,92 C65,75 35,25 50,8 Z" fill="#2c1e14" opacity="0.4" />
+      </svg>
     </div>
-  </div>
+    <div class="parallax-bean bean-2" data-speed="-0.1">
+      <svg viewBox="0 0 100 100" class="bean-svg">
+        <path d="M50,5 C20,5 10,30 10,50 C10,70 20,95 50,95 C80,95 90,70 90,50 C90,30 80,5 50,5 Z" fill="url(#goldBean)" />
+        <path d="M50,8 C20,25 80,75 50,92 C65,75 35,25 50,8 Z" fill="#2c1e14" opacity="0.4" />
+      </svg>
+    </div>
+    <div class="parallax-bean bean-3" data-speed="0.08">
+      <svg viewBox="0 0 100 100" class="bean-svg">
+        <path d="M50,5 C20,5 10,30 10,50 C10,70 20,95 50,95 C80,95 90,70 90,50 C90,30 80,5 50,5 Z" fill="url(#goldBean)" />
+        <path d="M50,8 C20,25 80,75 50,92 C65,75 35,25 50,8 Z" fill="#2c1e14" opacity="0.4" />
+      </svg>
+    </div>
+    <div class="parallax-bean bean-4" data-speed="-0.15">
+      <svg viewBox="0 0 100 100" class="bean-svg">
+        <path d="M50,5 C20,5 10,30 10,50 C10,70 20,95 50,95 C80,95 90,70 90,50 C90,30 80,5 50,5 Z" fill="url(#goldBean)" />
+        <path d="M50,8 C20,25 80,75 50,92 C65,75 35,25 50,8 Z" fill="#2c1e14" opacity="0.4" />
+      </svg>
+    </div>
+    <!-- Текст по центру -->
+    <div class="parallax-content reveal">
+      <h2>Свежая обжарка</h2>
+      <p>Каждое зерно проходит путь от фермы до вашей чашки. Мы обжариваем сами, чтобы вы пили только свежий кофе.</p>
+    </div>
+  </section>
   
   <!-- Menu -->
   <section class="menu" id="menu">
@@ -448,7 +493,14 @@
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">ОМБРЕ.</a>
+        <a href="index.html" class="logo">
+          <span>
+            <svg class="logo-bean" viewBox="0 0 50 50" aria-hidden="true">
+              <path d="M25,2 C11,2 5,15 5,25 C5,35 11,48 25,48 C39,48 45,35 45,25 C45,15 39,2 25,2 Z" fill="currentColor"/>
+              <path d="M25,4 C12,18 38,32 25,46" stroke="var(--accent)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>МБРЕ.
+          </span>
+        </a>
         <p>Кофейня, в которую хочется возвращаться. Свежий кофе, домашняя выпечка и атмосфера настоящего уюта в сердце Хорошево-Мневников.</p>
       </div>
       <div class="footer-col">
@@ -500,6 +552,6 @@
     </div>
   </div>
   
-  <script type="module" src="main.js?v=3"></script>
+  <script type="module" src="main.js?v=5"></script>
 </body>
 </html>
