@@ -1616,12 +1616,21 @@ footer {
 
 .footer-brand .logo {
   color: var(--cream);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   display: inline-block;
 }
 
+.footer-brand .logo span {
+  transform: translateY(0); /* Возвращаем на место */
+  color: var(--cream); /* Жестко задаем цвет */
+}
+
+.footer-brand .logo-bean {
+  transform: translateY(0px); /* Опускаем зерно в футере, чтобы выровнять по базовой линии */
+}
+
 .footer-brand p {
-  opacity: 0.7;
+  opacity: 0.85;
   font-size: 14px;
   line-height: 1.7;
   max-width: 300px;
